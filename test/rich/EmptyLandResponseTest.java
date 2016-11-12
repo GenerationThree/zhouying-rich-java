@@ -38,13 +38,12 @@ public class EmptyLandResponseTest {
     }
 
     @Test
-    public void should_buy_land_if_player_response_yes() {
+    public void should_buy_land_if_player_response_yes_within_budget() {
         when(map.move(eq(starting), eq(1))).thenReturn(emptyCheapLand);
 
         player = Player.createPlayerWithBalance(starting, START_BALANCE);
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
-
 
         player.respond(Response.YES_TO_BUY);
         assertThat(player.getState(), is(Player.State.END_TURN));
@@ -54,7 +53,7 @@ public class EmptyLandResponseTest {
     }
 
     @Test
-    public void should_buy_land_if_player_response_yes_without_budget() {
+    public void should_not_buy_land_if_player_response_yes_without_budget() {
         when(map.move(eq(starting), eq(1))).thenReturn(emptyExpensiveLand);
 
         player = Player.createPlayerWithBalance(starting, START_BALANCE);
@@ -68,5 +67,19 @@ public class EmptyLandResponseTest {
         assertThat(emptyCheapLand.getOwner(), is(nullValue()));
     }
 
+    @Test
+    public void should_not_buy_land_if_player_response_no() {
+        when(map.move(eq(starting), eq(1))).thenReturn(emptyCheapLand);
+
+        player = Player.createPlayerWithBalance(starting, START_BALANCE);
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
+
+        player.respond(Response.NO_TO_BUY);
+        assertThat(player.getState(), is(Player.State.END_TURN));
+        assertThat(player.getLands().size(), is(0));
+        assertThat(player.getBalance(), is(START_BALANCE));
+        assertThat(emptyCheapLand.getOwner(), is(nullValue()));
+    }
 
 }
