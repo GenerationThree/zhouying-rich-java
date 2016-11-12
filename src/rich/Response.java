@@ -8,6 +8,12 @@ public enum Response {
             player.buy();
             return Player.State.END_TURN;
         }
+    },
+    NO_TO_BUY {
+        @Override
+        public Player.State execute(Player player, Response response) {
+            return Player.State.END_TURN;
+        }
     };
 
 
