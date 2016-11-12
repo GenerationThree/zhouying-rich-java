@@ -18,7 +18,8 @@ public class EmptyLandResponseTest {
 
     private GameMap map;
     private Dice dice;
-    private Land emptyLand;
+    private Land emptyCheapLand;
+    private Land emptyExpensiveLand;
     private Land starting;
     private Player player;
     private Command roll;
@@ -29,32 +30,43 @@ public class EmptyLandResponseTest {
         dice = mock(Dice.class);
 
         starting = new Land();
-        emptyLand = Land.createLandWithPrice(WITHIN_BUDGET);
+        emptyCheapLand = Land.createLandWithPrice(WITHIN_BUDGET);
+        emptyExpensiveLand = Land.createLandWithPrice(WITHOUT_BUDGET);
 
         roll = new RollCommand(map, dice);
         when(dice.next()).thenReturn(1);
-        when(map.move(eq(starting), eq(1))).thenReturn(emptyLand);
-
-        player = Player.createPlayerWithBalance(starting, START_BALANCE);
-        player.execute(roll);
-        assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
     }
 
     @Test
     public void should_buy_land_if_player_response_yes() {
-        player.respond(Response.YSE_TO_BUY);
+        when(map.move(eq(starting), eq(1))).thenReturn(emptyCheapLand);
+
+        player = Player.createPlayerWithBalance(starting, START_BALANCE);
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
+
+
+        player.respond(Response.YES_TO_BUY);
         assertThat(player.getState(), is(Player.State.END_TURN));
         assertThat(player.getLands().size(), is(1));
         assertThat(player.getBalance(), is(START_BALANCE - WITHIN_BUDGET));
-        assertThat(emptyLand.getOwner(), is(player));
+        assertThat(emptyCheapLand.getOwner(), is(player));
     }
 
     @Test
     public void should_buy_land_if_player_response_yes_without_budget() {
-        player.respond(Response.NO_TO_BUY);
+        when(map.move(eq(starting), eq(1))).thenReturn(emptyExpensiveLand);
+
+        player = Player.createPlayerWithBalance(starting, START_BALANCE);
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
+
+        player.respond(Response.YES_TO_BUY);
         assertThat(player.getState(), is(Player.State.END_TURN));
         assertThat(player.getLands().size(), is(0));
         assertThat(player.getBalance(), is(START_BALANCE));
-        assertThat(emptyLand.getOwner(), is(nullValue()));
+        assertThat(emptyCheapLand.getOwner(), is(nullValue()));
     }
+
+
 }

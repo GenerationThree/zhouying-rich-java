@@ -2,7 +2,7 @@ package rich;
 
 public enum Response {
 
-    YSE_TO_BUY {
+    YES_TO_BUY {
         @Override
         public Player.State execute(Player player, Response response) {
             player.buy();
