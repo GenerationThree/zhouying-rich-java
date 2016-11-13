@@ -1,14 +1,27 @@
 package rich;
 
+import rich.command.Command;
+import rich.command.Response;
+import rich.place.Land;
+import rich.place.Place;
+import rich.tool.Tool;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.sun.tools.doclint.Entity.sum;
 
 public class Player {
     private State state;
     private Command lastExecuted;
     private List<Land> lands;
+    private Map<Tool, Integer> tools;
+    //    private List<Tool> tools;
     private int balance;
     private Place currentPlace;
+    private int points;
 
     public Player() {
         this.state = State.WAITING_FOR_COMMAND;
@@ -82,6 +95,57 @@ public class Player {
         player.lands = new ArrayList<>();
         player.lands.add(owingLand);
         return player;
+    }
+
+    public static Player createPlayerWithPoints(int startPoints) {
+        Player player = new Player();
+        player.points = startPoints;
+        return player;
+    }
+
+    public static Player createPlayerWithStartingAndPoints(Place starting, int startPoints) {
+        Player player = new Player();
+        player.currentPlace = starting;
+        player.points = startPoints;
+        player.tools = new HashMap<>();
+        return player;
+    }
+
+    public boolean canHaveMoreTools() {
+        int toolQuantityAmount = 0;
+        for (Integer quantity : tools.values()) {
+            toolQuantityAmount += quantity;
+        }
+        if (toolQuantityAmount >= 10)
+            return false;
+        else
+            return true;
+    }
+
+
+    public boolean pointsEnoughToBuyRoadBlock() {
+        return points > Tool.RoadBlock.getPoints();
+    }
+
+    public void buyTool(Tool tool) {
+        points -= tool.getPoints();
+        if (tools.containsKey(tool)) {
+            tools.put(tool, tools.get(tool) + 1);
+        } else {
+            tools.put(tool, 1);
+        }
+    }
+
+    public boolean hasEnoughPoints() {
+        return points >= Tool.Robot.getPoints();
+    }
+
+    public int getToolsAmount() {
+        int toolQuantityAmount = 0;
+        for (Integer quantity : tools.values()) {
+            toolQuantityAmount += quantity;
+        }
+        return toolQuantityAmount;
     }
 
     public enum State {WAITING_FOR_RESPONSE, END_TURN, WAITING_FOR_COMMAND}

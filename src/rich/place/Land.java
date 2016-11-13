@@ -1,4 +1,6 @@
-package rich;
+package rich.place;
+
+import rich.Player;
 
 public class Land implements Place{
     private static final int TOP_LEVEL = 3;
