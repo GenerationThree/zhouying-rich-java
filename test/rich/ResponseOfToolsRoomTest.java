@@ -14,7 +14,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ToolsRoomResponseTest {
+public class ResponseOfToolsRoomTest {
 
     private static final int ZERO_POINTS = 0;
     private static final int POINTS_CAN_BUY_ONE = 60;
@@ -78,7 +78,7 @@ public class ToolsRoomResponseTest {
     public void should_end_turn_when_player_choose_to_exit() {
         player = Player.createPlayerWithStartingAndPoints(starting, ENOUGH_POINTS);
         player.execute(roll);
-        player.respond(RollCommand.ExitToolsHome);
+        player.respond(RollCommand.ExitToolsRoom);
         assertThat(player.getState(), is(Player.State.END_TURN));
     }
 }

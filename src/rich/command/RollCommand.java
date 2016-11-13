@@ -59,6 +59,23 @@ public class RollCommand implements Command {
         return Player.State.END_TURN;
     };
 
-    public static Response ExitToolsHome = player -> Player.State.END_TURN;
+    public static Response ExitToolsRoom = player -> Player.State.END_TURN;
+
+    public static Response ChooseBonus = player -> {
+        player.gainBonus();
+        return Player.State.END_TURN;
+    };
+
+    public static Response ChoosePoint = player -> {
+        player.gainPoints();
+        return Player.State.END_TURN;
+    };
+
+    public static Response ChooseMascot = player -> {
+        player.gainNoPunishTimes();
+        return Player.State.END_TURN;
+    };
+
+    public static Response ExitGiftsRoom = player -> Player.State.END_TURN;
 
 }

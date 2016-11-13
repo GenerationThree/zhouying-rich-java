@@ -12,7 +12,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SelfLandResponseTest {
+public class ResponseOfSelfLandTest {
 
     private static final int START_BALANCE = 3000;
     private static final int UPGRADE_COST = 300;

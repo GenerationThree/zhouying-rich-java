@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.sun.tools.doclint.Entity.sum;
 import static rich.tool.Tool.RoadBlock;
 import static rich.tool.Tool.Robot;
 
@@ -24,6 +23,7 @@ public class Player {
     private Place currentPlace;
     private int points;
     private int toolsAmount;
+    private int noPunishTimes;
 
     public int getPoints() {
         return points;
@@ -31,7 +31,13 @@ public class Player {
 
     public Player() {
         this.state = State.WAITING_FOR_COMMAND;
+        this.lastExecuted = null;
+        this.lands = new ArrayList<>();
+        this.tools = new HashMap<>();
+        this.balance = 0;
+        this.points = 0;
         this.toolsAmount = 0;
+        this.noPunishTimes = 0;
     }
 
     public State getState() {
@@ -137,6 +143,22 @@ public class Player {
 
     public int getToolsAmount() {
         return toolsAmount;
+    }
+
+    public void gainBonus() {
+        balance += GameConstant.MONEY_BONUS;
+    }
+
+    public void gainPoints() {
+        points += GameConstant.POINT_BONUS;
+    }
+
+    public void gainNoPunishTimes() {
+        noPunishTimes += GameConstant.MASCOT_BONUS;
+    }
+
+    public int getNoPunishTimes() {
+        return noPunishTimes;
     }
 
     public enum State {WAITING_FOR_RESPONSE, END_TURN, WAITING_FOR_COMMAND}
