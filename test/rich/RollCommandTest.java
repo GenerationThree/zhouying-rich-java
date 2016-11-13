@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import rich.command.Command;
 import rich.command.RollCommand;
-import rich.place.Land;
 import rich.place.Place;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -17,8 +16,10 @@ public class RollCommandTest {
 
     private GameMap map;
     private Dice dice;
+
     private Place starting;
     private Place target;
+
     private Player player;
     private Command roll;
 
@@ -27,7 +28,7 @@ public class RollCommandTest {
         map = mock(GameMap.class);
         dice = mock(Dice.class);
         starting = mock(Place.class);
-        target = mock(Land.class);
+        target = mock(Place.class);
 
         roll = new RollCommand(map, dice);
         player =  Player.createPlayerWithStarting(starting);
@@ -57,6 +58,69 @@ public class RollCommandTest {
 
     @Test
     public void should_end_turn_when_roll_to_others_land() {
+        when(target.actionTo(eq(player))).thenReturn(Player.State.END_TURN);
+
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.END_TURN));
+        assertThat(player.getCurrentPlace(), is(target));
+    }
+
+    @Test
+    public void should_end_turn_when_roll_to_tools_room_but_can_not_buy() {
+        when(target.actionTo(eq(player))).thenReturn(Player.State.END_TURN);
+
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.END_TURN));
+        assertThat(player.getCurrentPlace(), is(target));
+    }
+
+    @Test
+    public void should_waiting_for_response_when_roll_to_tools_room_and_can_buy() {
+        when(target.actionTo(eq(player))).thenReturn(Player.State.WAITING_FOR_RESPONSE);
+
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
+        assertThat(player.getCurrentPlace(), is(target));
+    }
+
+    @Test
+    public void should_end_turn_when_roll_to_gifts_room_but_choose_a_wrong_one() {
+        when(target.actionTo(eq(player))).thenReturn(Player.State.END_TURN);
+
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.END_TURN));
+        assertThat(player.getCurrentPlace(), is(target));
+    }
+
+    @Test
+    public void should_waiting_for_response_when_roll_to_gifts_room_and_choose_a_correct_one() {
+        when(target.actionTo(eq(player))).thenReturn(Player.State.WAITING_FOR_RESPONSE);
+
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
+        assertThat(player.getCurrentPlace(), is(target));
+    }
+
+    @Test
+    public void should_end_turn_when_roll_to_prison() {
+        when(target.actionTo(eq(player))).thenReturn(Player.State.END_TURN);
+
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.END_TURN));
+        assertThat(player.getCurrentPlace(), is(target));
+    }
+
+    @Test
+    public void should_end_turn_when_roll_to_road_block() {
+        when(target.actionTo(eq(player))).thenReturn(Player.State.END_TURN);
+
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.END_TURN));
+        assertThat(player.getCurrentPlace(), is(target));
+    }
+
+    @Test
+    public void should_end_turn_when_roll_to_bomb() {
         when(target.actionTo(eq(player))).thenReturn(Player.State.END_TURN);
 
         player.execute(roll);
