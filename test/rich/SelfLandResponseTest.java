@@ -41,60 +41,63 @@ public class SelfLandResponseTest {
         assertThat(targetLand.roadToll(), is(0));
         player.execute(roll);
         player.respond(RollCommand.YesToBuy);
+
         assertThat(player.getCurrentLand(), is(targetLand));
         assertThat(player.getBalance(), is(START_BALANCE - WITHIN_BUDGET));
 
         assertThat(targetLand.getOwner(), is(player));
         assertThat(targetLand.getCurrentLevel(), is(0));
         assertThat(targetLand.roadToll(), is(WITHIN_BUDGET / 2));
+
+        // Then, player come to his own land
+        when(map.move(any(Land.class), eq(1))).thenReturn(targetLand);
+        player.execute(roll);
     }
 
     @Test
     public void should_not_upgrade_land_if_player_say_no() {
-        when(map.move(any(Land.class), eq(1))).thenReturn(targetLand);
-        player.execute(roll);
         player.respond(RollCommand.NoToUpgrade);
+
         assertThat(player.getBalance(), is(START_BALANCE - WITHIN_BUDGET));
+        assertThat(player.getState(), is(Player.State.END_TURN));
+
         assertThat(targetLand.getCurrentLevel(), is(0));
         assertThat(targetLand.roadToll(), is(WITHIN_BUDGET / 2));
-        assertThat(player.getState(), is(Player.State.END_TURN));
     }
 
     @Test
     public void should_upgrade_land_if_player_say_yes() {
-        when(map.move(any(Land.class), eq(1))).thenReturn(targetLand);
-        player.execute(roll);
         player.respond(RollCommand.YesToUpgrade);
+
         assertThat(player.getBalance(), is(START_BALANCE - WITHIN_BUDGET - WITHIN_BUDGET));
+        assertThat(player.getState(), is(Player.State.END_TURN));
+
         assertThat(targetLand.getCurrentLevel(), is(1));
         assertThat(targetLand.roadToll(), is(WITHIN_BUDGET));
-        assertThat(player.getState(), is(Player.State.END_TURN));
     }
 
     @Test
     public void should_not_upgrade_if_player_say_yes_but_without_budget() {
-        when(map.move(any(Land.class), eq(1))).thenReturn(targetLand);
         targetLand.setPrice(WITHOUT_BUDGET);
-
-        player.execute(roll);
         player.respond(RollCommand.YesToUpgrade);
+
         assertThat(player.getBalance(), is(START_BALANCE - WITHIN_BUDGET));
+        assertThat(player.getState(), is(Player.State.END_TURN));
+
         assertThat(targetLand.getCurrentLevel(), is(0));
         assertThat(targetLand.roadToll(), is(WITHOUT_BUDGET / 2));
-        assertThat(player.getState(), is(Player.State.END_TURN));
     }
 
     @Test
     public void should_not_upgrade_if_player_say_yes_but_target_land_can_not_be_upgraded() {
-        when(map.move(any(Land.class), eq(1))).thenReturn(targetLand);
         targetLand.setLevel(TOP_LEVEL);
-
-        player.execute(roll);
         player.respond(RollCommand.YesToUpgrade);
+
         assertThat(player.getBalance(), is(START_BALANCE - WITHIN_BUDGET));
+        assertThat(player.getState(), is(Player.State.END_TURN));
+
         assertThat(targetLand.getCurrentLevel(), is(TOP_LEVEL));
         assertThat(targetLand.roadToll(), is(WITHIN_BUDGET * 4));
-        assertThat(player.getState(), is(Player.State.END_TURN));
     }
 
 }

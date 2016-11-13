@@ -28,14 +28,16 @@ public class RollCommandTest {
         emptyLand = mock(Land.class);
         othersLand = mock(Land.class);
         selfLand = mock(Land.class);
+
         roll = new RollCommand(map, dice);
+        player =  Player.createPlayerWithStarting(starting);
+
         when(dice.next()).thenReturn(1);
     }
 
     @Test
     public void should_wait_for_response_when_roll_to_empty_land() {
         when(map.move(eq(starting), eq(1))).thenReturn(emptyLand);
-        Player player =  Player.createPlayerWithStarting(starting);
 
         assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
         player.execute(roll);
@@ -46,7 +48,6 @@ public class RollCommandTest {
     @Test
     public void should_wait_for_response_when_roll_to_self_land() {
         when(map.move(eq(starting), eq(1))).thenReturn(selfLand);
-        Player player =  Player.createPlayerWithStarting(starting);
 
         assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
         player.execute(roll);
@@ -58,7 +59,6 @@ public class RollCommandTest {
     public void should_end_turn_when_roll_to_others_land() {
         when(map.move(eq(starting), eq(1))).thenReturn(othersLand);
         when(othersLand.getOwner()).thenReturn(new Player());
-        Player player =  Player.createPlayerWithStarting(starting);
 
         assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
         player.execute(roll);
