@@ -62,9 +62,15 @@ public class Player {
     public void buy() {
         if (currentLand.getPrice() <= balance) {
             balance -= currentLand.getPrice();
-            System.out.println(balance);
             lands.add(currentLand);
             currentLand.boughtBy(this);
+        }
+    }
+
+    public void upgrade() {
+        if (currentLand.getPrice() <= balance && currentLand.canUpgrade()) {
+            balance -= currentLand.getPrice();
+            currentLand.upgrade();
         }
     }
 

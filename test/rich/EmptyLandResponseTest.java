@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 public class EmptyLandResponseTest {
 
     private static final int START_BALANCE = 3000;
-    private static final int WITHIN_BUDGET = 1;
+    private static final int WITHIN_BUDGET = 200;
     private static final int WITHOUT_BUDGET = 100000000;
 
     private GameMap map;

@@ -3,7 +3,6 @@ package rich;
 import org.junit.Before;
 import org.junit.Test;
 
-import static javafx.scene.input.KeyCode.R;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.eq;
