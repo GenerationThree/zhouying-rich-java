@@ -13,10 +13,8 @@ public class RollCommandTest {
 
     private GameMap map;
     private Dice dice;
-    private Land emptyLand;
-    private Land starting;
-    private Land othersLand;
-    private Land selfLand;
+    private Place starting;
+    private Place target;
     private Player player;
     private Command roll;
 
@@ -24,46 +22,42 @@ public class RollCommandTest {
     public void before() {
         map = mock(GameMap.class);
         dice = mock(Dice.class);
-        starting = mock(Land.class);
-        emptyLand = mock(Land.class);
-        othersLand = mock(Land.class);
-        selfLand = mock(Land.class);
+        starting = mock(Place.class);
+        target = mock(Land.class);
 
         roll = new RollCommand(map, dice);
         player =  Player.createPlayerWithStarting(starting);
 
         when(dice.next()).thenReturn(1);
+        when(map.move(eq(starting), eq(1))).thenReturn(target);
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
     }
 
     @Test
     public void should_wait_for_response_when_roll_to_empty_land() {
-        when(map.move(eq(starting), eq(1))).thenReturn(emptyLand);
+        when(target.actionTo(eq(player))).thenReturn(Player.State.WAITING_FOR_RESPONSE);
 
-        assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
-        assertThat(player.getCurrentLand(), is(emptyLand));
+        assertThat(player.getCurrentPlace(), is(target));
     }
 
     @Test
     public void should_wait_for_response_when_roll_to_self_land() {
-        when(map.move(eq(starting), eq(1))).thenReturn(selfLand);
+        when(target.actionTo(eq(player))).thenReturn(Player.State.WAITING_FOR_RESPONSE);
 
-        assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
-        assertThat(player.getCurrentLand(), is(selfLand));
+        assertThat(player.getCurrentPlace(), is(target));
     }
 
     @Test
     public void should_end_turn_when_roll_to_others_land() {
-        when(map.move(eq(starting), eq(1))).thenReturn(othersLand);
-        when(othersLand.getOwner()).thenReturn(new Player());
+        when(target.actionTo(eq(player))).thenReturn(Player.State.END_TURN);
 
-        assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.END_TURN));
-        assertThat(player.getCurrentLand(), is(othersLand));
+        assertThat(player.getCurrentPlace(), is(target));
     }
 
 }

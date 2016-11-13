@@ -18,9 +18,11 @@ public class EmptyLandResponseTest {
 
     private GameMap map;
     private Dice dice;
+
     private Land emptyCheapLand;
     private Land emptyExpensiveLand;
-    private Land starting;
+    private Place starting;
+
     private Player player;
     private Command roll;
 
@@ -28,8 +30,8 @@ public class EmptyLandResponseTest {
     public void before() {
         map = mock(GameMap.class);
         dice = mock(Dice.class);
+        starting = mock(Place.class);
 
-        starting = new Land();
         emptyCheapLand = Land.createLandWithPrice(WITHIN_BUDGET);
         emptyExpensiveLand = Land.createLandWithPrice(WITHOUT_BUDGET);
 

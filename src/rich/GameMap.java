@@ -1,5 +1,5 @@
 package rich;
 
 public interface GameMap {
-    Land move(Land currentLand, int next);
+    Place move(Place currentPlace, int next);
 }

@@ -11,13 +11,9 @@ public class RollCommand implements Command {
 
     @Override
     public Player.State execute(Player player) {
-        Land target = map.move(player.getCurrentLand(), dice.next());
-        player.moveTo(target);
-
-        if (target.getOwner() != null && target.getOwner() != player ) {
-            return Player.State.END_TURN;
-        }
-        return Player.State.WAITING_FOR_RESPONSE;
+        Place target_ = map.move(player.getCurrentPlace(), dice.next());
+        player.moveTo(target_);
+        return target_.actionTo(player);
     }
 
     @Override
@@ -26,21 +22,15 @@ public class RollCommand implements Command {
     }
 
     public static Response YesToBuy = player -> {
-        Land current = player.getCurrentLand();
-        if (current.getOwner() == null) {
-            player.buy();
-        }
-        return Player.State.END_TURN;
+        Place current = player.getCurrentPlace();
+        return current.actionToResponse(player);
     };
 
     public static Response NoToBuy = player -> Player.State.END_TURN;
 
     public static Response YesToUpgrade = player -> {
-        Land current = player.getCurrentLand();
-        if (current.getOwner() == player) {
-            player.upgrade();
-        }
-        return Player.State.END_TURN;
+        Place current = player.getCurrentPlace();
+        return current.actionToResponse(player);
     };
 
     public static Response NoToUpgrade = player -> Player.State.END_TURN;

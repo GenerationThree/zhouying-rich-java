@@ -1,6 +1,6 @@
 package rich;
 
-public class Land {
+public class Land implements Place{
     private static final int TOP_LEVEL = 3;
     private Player owner;
     private int currentLevel;
@@ -22,10 +22,6 @@ public class Land {
 
     public int getPrice() {
         return price;
-    }
-
-    public void boughtBy(Player player) {
-        owner = player;
     }
 
     public static Land createLandWithPrice(int price) {
@@ -71,5 +67,34 @@ public class Land {
     // For test, clean it!!!
     public void setLevel(int level) {
         this.currentLevel = level;
+    }
+
+    @Override
+    public Player.State actionTo(Player player) {
+        if (owner != null && owner != player ) {
+            return Player.State.END_TURN;
+        }
+        if (owner == player) {
+            return Player.State.WAITING_FOR_RESPONSE;
+        }
+        else return Player.State.WAITING_FOR_RESPONSE;
+    }
+
+    @Override
+    public Player.State actionToResponse(Player player) {
+        if (getOwner() == null) {
+            player.buy(this);
+        }
+        else if (getOwner() == player) {
+            player.upgrade(this);
+        }
+        else {
+//            player.pay(this);
+        }
+        return Player.State.END_TURN;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 }

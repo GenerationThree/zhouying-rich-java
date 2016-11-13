@@ -6,9 +6,9 @@ import java.util.List;
 public class Player {
     private State state;
     private Command lastExecuted;
-    private Land currentLand;
     private List<Land> lands;
     private int balance;
+    private Place currentPlace;
 
     public Player() {
         this.state = State.WAITING_FOR_COMMAND;
@@ -29,25 +29,26 @@ public class Player {
         return state;
     }
 
-    public Land getCurrentLand() {
-        return currentLand;
+    public Place getCurrentPlace() {
+        return currentPlace;
     }
 
-    public void moveTo(Land target) {
-        currentLand = target;
+
+    public void moveTo(Place target) {
+        currentPlace = target;
     }
 
-    public static Player createPlayerWithStarting(Land starting) {
+    public static Player createPlayerWithStarting(Place starting) {
         Player player = new Player();
-        player.currentLand = starting;
+        player.currentPlace = starting;
         return player;
     }
 
-    public static Player createPlayerWithBalance(Land starting, int money) {
+    public static Player createPlayerWithBalance(Place starting, int startBalance) {
         Player player = new Player();
-        player.currentLand = starting;
+        player.currentPlace = starting;
         player.lands = new ArrayList<>();
-        player.balance = money;
+        player.balance = startBalance;
         return player;
     }
 
@@ -59,19 +60,28 @@ public class Player {
         return lands;
     }
 
-    public void buy() {
-        if (currentLand.getPrice() <= balance) {
-            balance -= currentLand.getPrice();
-            lands.add(currentLand);
-            currentLand.boughtBy(this);
+    public void buy(Land land) {
+        if (land.getPrice() <= balance) {
+            balance -= land.getPrice();
+            land.setOwner(this);
+            lands.add(land);
         }
     }
 
-    public void upgrade() {
-        if (currentLand.getPrice() <= balance && currentLand.canUpgrade()) {
-            balance -= currentLand.getPrice();
-            currentLand.upgrade();
+    public void upgrade(Land land) {
+        if (land.getPrice() <= balance && land.canUpgrade()) {
+            balance -= land.getPrice();
+            land.upgrade();
         }
+    }
+
+    public static Player createPlayerWithBalanceStartingAndOwingLand(int startBalance, Place starting, Land owingLand) {
+        Player player = new Player();
+        player.currentPlace = starting;
+        player.balance = startBalance;
+        player.lands = new ArrayList<>();
+        player.lands.add(owingLand);
+        return player;
     }
 
     public enum State {WAITING_FOR_RESPONSE, END_TURN, WAITING_FOR_COMMAND}
