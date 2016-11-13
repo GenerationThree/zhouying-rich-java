@@ -70,7 +70,7 @@ public class Player {
         return player;
     }
 
-    public static Player createPlayerWithBalance(Place starting, int startBalance) {
+    public static Player createPlayerWithStartingAndBalance(Place starting, int startBalance) {
         Player player = new Player();
         player.currentPlace = starting;
         player.lands = new ArrayList<>();
@@ -162,5 +162,14 @@ public class Player {
         return noPunishTimes;
     }
 
-    public enum State {WAITING_FOR_RESPONSE, END_TURN, WAITING_FOR_COMMAND}
+    public boolean canAfford(int price) {
+        if (noPunishTimes > 0) return true;
+        else return balance >= price;
+    }
+
+    public void pay(int price) {
+        balance -= price;
+    }
+
+    public enum State {WAITING_FOR_RESPONSE, END_TURN, GAME_OVER, WAITING_FOR_COMMAND}
 }

@@ -1,7 +1,12 @@
-package rich;
+package rich.integration;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
+import rich.Dice;
+import rich.GameConstant;
+import rich.GameMap;
+import rich.Player;
 import rich.command.Command;
 import rich.command.RollCommand;
 import rich.place.GiftsRoom;
@@ -50,7 +55,7 @@ public class ResponseOfGiftsRoomTest {
     public void should_choose_money_bonus() {
         player.respond(RollCommand.ChooseBonus);
         assertThat(player.getState(), is(Player.State.END_TURN));
-        assertThat(player.getBalance(), is(GameConstant.MONEY_BONUS));
+        assertThat(player.getBalance(), CoreMatchers.is(GameConstant.MONEY_BONUS));
     }
 
     @Test

@@ -2,7 +2,7 @@ package rich.place;
 
 import rich.Player;
 
-public class Land implements Place{
+public class Land implements Place {
     private static final int TOP_LEVEL = 3;
     private Player owner;
     private int currentLevel;
@@ -73,13 +73,21 @@ public class Land implements Place{
 
     @Override
     public Player.State actionTo(Player player) {
-        if (owner != null && owner != player ) {
-            return Player.State.END_TURN;
+        if (owner != null && owner != player) {
+            if (player.canAfford(this.price)) {
+                player.pay(this.price);
+                return Player.State.END_TURN;
+            }
+            else {
+                return Player.State.GAME_OVER;
+            }
         }
         if (owner == player) {
             return Player.State.WAITING_FOR_RESPONSE;
         }
-        else return Player.State.WAITING_FOR_RESPONSE;
+        else {
+            return Player.State.WAITING_FOR_RESPONSE;
+        }
     }
 
     public void setOwner(Player owner) {

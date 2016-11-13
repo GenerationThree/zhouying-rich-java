@@ -1,7 +1,10 @@
-package rich;
+package rich.integration;
 
 import org.junit.Before;
 import org.junit.Test;
+import rich.Dice;
+import rich.GameMap;
+import rich.Player;
 import rich.command.Command;
 import rich.command.RollCommand;
 import rich.place.Land;
@@ -47,7 +50,7 @@ public class ResponseOfEmptyLandTest {
     public void should_buy_land_if_player_response_yes_within_budget() {
         when(map.move(eq(starting), eq(1))).thenReturn(emptyCheapLand);
 
-        player = Player.createPlayerWithBalance(starting, START_BALANCE);
+        player = Player.createPlayerWithStartingAndBalance(starting, START_BALANCE);
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
 
@@ -62,7 +65,7 @@ public class ResponseOfEmptyLandTest {
     public void should_not_buy_land_if_player_response_yes_without_budget() {
         when(map.move(eq(starting), eq(1))).thenReturn(emptyExpensiveLand);
 
-        player = Player.createPlayerWithBalance(starting, START_BALANCE);
+        player = Player.createPlayerWithStartingAndBalance(starting, START_BALANCE);
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
 
@@ -77,7 +80,7 @@ public class ResponseOfEmptyLandTest {
     public void should_not_buy_land_if_player_response_no() {
         when(map.move(eq(starting), eq(1))).thenReturn(emptyCheapLand);
 
-        player = Player.createPlayerWithBalance(starting, START_BALANCE);
+        player = Player.createPlayerWithStartingAndBalance(starting, START_BALANCE);
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
 

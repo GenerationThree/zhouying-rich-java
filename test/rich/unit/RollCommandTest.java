@@ -1,7 +1,10 @@
-package rich;
+package rich.unit;
 
 import org.junit.Before;
 import org.junit.Test;
+import rich.Dice;
+import rich.GameMap;
+import rich.Player;
 import rich.command.Command;
 import rich.command.RollCommand;
 import rich.place.Place;
