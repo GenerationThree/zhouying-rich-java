@@ -52,7 +52,7 @@ public class PlayerTest {
 
 
         Response response = mock(Response.class);
-        when(response.execute(eq(player), eq(response))).thenReturn(Player.State.END_TURN);
+        when(command.respondWith(eq(player), eq(response))).thenReturn(Player.State.END_TURN);
 
         player.respond(response);
         assertThat(player.getState(), is(Player.State.END_TURN));

@@ -25,7 +25,7 @@ public class Player {
     }
 
     public State respond(Response response) {
-        state = response.execute(this, response);
+        state = lastExecuted.respondWith(this, response);
         return state;
     }
 

@@ -40,7 +40,7 @@ public class SelfLandResponseTest {
         // First, player buy an empty land
         assertThat(targetLand.roadToll(), is(0));
         player.execute(roll);
-        player.respond(Response.YES_TO_BUY);
+        player.respond(RollCommand.YesToBuy);
         assertThat(player.getCurrentLand(), is(targetLand));
         assertThat(player.getBalance(), is(START_BALANCE - WITHIN_BUDGET));
 
@@ -53,7 +53,7 @@ public class SelfLandResponseTest {
     public void should_not_upgrade_land_if_player_say_no() {
         when(map.move(any(Land.class), eq(1))).thenReturn(targetLand);
         player.execute(roll);
-        player.respond(Response.NO_TO_UPGRADE);
+        player.respond(RollCommand.NoToUpgrade);
         assertThat(player.getBalance(), is(START_BALANCE - WITHIN_BUDGET));
         assertThat(targetLand.getCurrentLevel(), is(0));
         assertThat(targetLand.roadToll(), is(WITHIN_BUDGET / 2));
@@ -64,7 +64,7 @@ public class SelfLandResponseTest {
     public void should_upgrade_land_if_player_say_yes() {
         when(map.move(any(Land.class), eq(1))).thenReturn(targetLand);
         player.execute(roll);
-        player.respond(Response.YES_TO_UPGRADE);
+        player.respond(RollCommand.YesToUpgrade);
         assertThat(player.getBalance(), is(START_BALANCE - WITHIN_BUDGET - WITHIN_BUDGET));
         assertThat(targetLand.getCurrentLevel(), is(1));
         assertThat(targetLand.roadToll(), is(WITHIN_BUDGET));
@@ -77,7 +77,7 @@ public class SelfLandResponseTest {
         targetLand.setPrice(WITHOUT_BUDGET);
 
         player.execute(roll);
-        player.respond(Response.YES_TO_UPGRADE);
+        player.respond(RollCommand.YesToUpgrade);
         assertThat(player.getBalance(), is(START_BALANCE - WITHIN_BUDGET));
         assertThat(targetLand.getCurrentLevel(), is(0));
         assertThat(targetLand.roadToll(), is(WITHOUT_BUDGET / 2));
@@ -90,7 +90,7 @@ public class SelfLandResponseTest {
         targetLand.setLevel(TOP_LEVEL);
 
         player.execute(roll);
-        player.respond(Response.YES_TO_UPGRADE);
+        player.respond(RollCommand.YesToUpgrade);
         assertThat(player.getBalance(), is(START_BALANCE - WITHIN_BUDGET));
         assertThat(targetLand.getCurrentLevel(), is(TOP_LEVEL));
         assertThat(targetLand.roadToll(), is(WITHIN_BUDGET * 4));

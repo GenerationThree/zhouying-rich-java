@@ -68,6 +68,7 @@ public class Land {
         this.price = price;
     }
 
+    // For test, clean it!!!
     public void setLevel(int level) {
         this.currentLevel = level;
     }

@@ -45,7 +45,7 @@ public class EmptyLandResponseTest {
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
 
-        player.respond(Response.YES_TO_BUY);
+        player.respond(RollCommand.YesToBuy);
         assertThat(player.getState(), is(Player.State.END_TURN));
         assertThat(player.getLands().size(), is(1));
         assertThat(player.getBalance(), is(START_BALANCE - WITHIN_BUDGET));
@@ -60,7 +60,7 @@ public class EmptyLandResponseTest {
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
 
-        player.respond(Response.YES_TO_BUY);
+        player.respond(RollCommand.YesToBuy);
         assertThat(player.getState(), is(Player.State.END_TURN));
         assertThat(player.getLands().size(), is(0));
         assertThat(player.getBalance(), is(START_BALANCE));
@@ -75,7 +75,7 @@ public class EmptyLandResponseTest {
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
 
-        player.respond(Response.NO_TO_BUY);
+        player.respond(RollCommand.NoToBuy);
         assertThat(player.getState(), is(Player.State.END_TURN));
         assertThat(player.getLands().size(), is(0));
         assertThat(player.getBalance(), is(START_BALANCE));

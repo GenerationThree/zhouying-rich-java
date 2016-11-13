@@ -19,4 +19,30 @@ public class RollCommand implements Command {
         }
         return Player.State.WAITING_FOR_RESPONSE;
     }
+
+    @Override
+    public Player.State respondWith(Player player, Response response) {
+        return response.execute(player);
+    }
+
+    public static Response YesToBuy = player -> {
+        Land current = player.getCurrentLand();
+        if (current.getOwner() == null) {
+            player.buy();
+        }
+        return Player.State.END_TURN;
+    };
+
+    public static Response NoToBuy = player -> Player.State.END_TURN;
+
+    public static Response YesToUpgrade = player -> {
+        Land current = player.getCurrentLand();
+        if (current.getOwner() == player) {
+            player.upgrade();
+        }
+        return Player.State.END_TURN;
+    };
+
+    public static Response NoToUpgrade = player -> Player.State.END_TURN;
+
 }
