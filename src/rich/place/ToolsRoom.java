@@ -4,19 +4,13 @@ import rich.Player;
 import rich.tool.Tool;
 
 public class ToolsRoom implements Place {
+    public static Tool CHEAPEST_TOOL = Tool.Robot;
     @Override
     public Player.State actionTo(Player player) {
-        if (player.canHaveMoreTools() && player.hasEnoughPoints()) {
+        if (player.canBuy(CHEAPEST_TOOL)) {
             return Player.State.WAITING_FOR_RESPONSE;
         }
         return Player.State.END_TURN;
     }
 
-    @Override
-    public Player.State actionToResponse(Player player) {
-        if (player.pointsEnoughToBuyRoadBlock()) {
-            player.buyTool(Tool.RoadBlock);
-        }
-        return Player.State.END_TURN;
-    }
 }

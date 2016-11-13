@@ -12,19 +12,26 @@ import java.util.List;
 import java.util.Map;
 
 import static com.sun.tools.doclint.Entity.sum;
+import static rich.tool.Tool.RoadBlock;
+import static rich.tool.Tool.Robot;
 
 public class Player {
     private State state;
     private Command lastExecuted;
     private List<Land> lands;
-    private Map<Tool, Integer> tools;
-    //    private List<Tool> tools;
+    private Map<Integer, Integer> tools;
     private int balance;
     private Place currentPlace;
     private int points;
+    private int toolsAmount;
+
+    public int getPoints() {
+        return points;
+    }
 
     public Player() {
         this.state = State.WAITING_FOR_COMMAND;
+        this.toolsAmount = 0;
     }
 
     public State getState() {
@@ -97,12 +104,6 @@ public class Player {
         return player;
     }
 
-    public static Player createPlayerWithPoints(int startPoints) {
-        Player player = new Player();
-        player.points = startPoints;
-        return player;
-    }
-
     public static Player createPlayerWithStartingAndPoints(Place starting, int startPoints) {
         Player player = new Player();
         player.currentPlace = starting;
@@ -111,41 +112,31 @@ public class Player {
         return player;
     }
 
-    public boolean canHaveMoreTools() {
-        int toolQuantityAmount = 0;
-        for (Integer quantity : tools.values()) {
-            toolQuantityAmount += quantity;
-        }
-        if (toolQuantityAmount >= 10)
-            return false;
-        else
+    public boolean buyTool(Tool tool) {
+        if (canBuy(tool)) {
+            points -= tool.getPoints();
+            toolsAmount += 1;
+            if (tool.ordinal() == RoadBlock.ordinal()) {
+                int curNum = tools.getOrDefault(tool.ordinal(), 0);
+                tools.put(RoadBlock.ordinal(), curNum + 1);
+            } else if (tool.ordinal() == Robot.ordinal()) {
+                int curNum = tools.getOrDefault(tool.ordinal(), 0);
+                tools.put(RoadBlock.ordinal(), curNum + 1);
+            } else {
+                int curNum = tools.getOrDefault(tool.ordinal(), 0);
+                tools.put(RoadBlock.ordinal(), curNum + 1);
+            }
             return true;
-    }
-
-
-    public boolean pointsEnoughToBuyRoadBlock() {
-        return points > Tool.RoadBlock.getPoints();
-    }
-
-    public void buyTool(Tool tool) {
-        points -= tool.getPoints();
-        if (tools.containsKey(tool)) {
-            tools.put(tool, tools.get(tool) + 1);
-        } else {
-            tools.put(tool, 1);
         }
+        return false;
     }
 
-    public boolean hasEnoughPoints() {
-        return points >= Tool.Robot.getPoints();
+    public boolean canBuy(Tool tool) {
+        return tool.getPoints() < points && toolsAmount < 10;
     }
 
     public int getToolsAmount() {
-        int toolQuantityAmount = 0;
-        for (Integer quantity : tools.values()) {
-            toolQuantityAmount += quantity;
-        }
-        return toolQuantityAmount;
+        return toolsAmount;
     }
 
     public enum State {WAITING_FOR_RESPONSE, END_TURN, WAITING_FOR_COMMAND}

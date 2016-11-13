@@ -1,7 +1,12 @@
 package rich.command;
 
-import rich.*;
+import rich.Dice;
+import rich.GameMap;
+import rich.Player;
+import rich.place.Land;
 import rich.place.Place;
+import rich.place.ToolsRoom;
+import rich.tool.Tool;
 
 public class RollCommand implements Command {
     private GameMap map;
@@ -25,22 +30,35 @@ public class RollCommand implements Command {
     }
 
     public static Response YesToBuy = player -> {
-        Place current = player.getCurrentPlace();
-        return current.actionToResponse(player);
+        Land land = (Land) player.getCurrentPlace();
+        if (land.getOwner() == null) {
+            player.buy(land);
+        }
+        return Player.State.END_TURN;
     };
 
     public static Response NoToBuy = player -> Player.State.END_TURN;
 
     public static Response YesToUpgrade = player -> {
-        Place current = player.getCurrentPlace();
-        return current.actionToResponse(player);
+        Land land = (Land) player.getCurrentPlace();
+        if (land.getOwner() == player) {
+            player.upgrade(land);
+        }
+        return Player.State.END_TURN;
     };
 
     public static Response NoToUpgrade = player -> Player.State.END_TURN;
 
     public static Response BuyRoadBlock = player -> {
-        Place current = player.getCurrentPlace();
-        return current.actionToResponse(player);
+        if (player.buyTool(Tool.RoadBlock)) {
+            if (player.canBuy(ToolsRoom.CHEAPEST_TOOL))
+                return Player.State.WAITING_FOR_RESPONSE;
+            else
+                return Player.State.END_TURN;
+        }
+        return Player.State.END_TURN;
     };
+
+    public static Response ExitToolsHome = player -> Player.State.END_TURN;
 
 }

@@ -82,20 +82,6 @@ public class Land implements Place{
         else return Player.State.WAITING_FOR_RESPONSE;
     }
 
-    @Override
-    public Player.State actionToResponse(Player player) {
-        if (getOwner() == null) {
-            player.buy(this);
-        }
-        else if (getOwner() == player) {
-            player.upgrade(this);
-        }
-        else {
-//            player.pay(this);
-        }
-        return Player.State.END_TURN;
-    }
-
     public void setOwner(Player owner) {
         this.owner = owner;
     }

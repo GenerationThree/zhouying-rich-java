@@ -6,6 +6,7 @@ import rich.command.Command;
 import rich.command.RollCommand;
 import rich.place.Place;
 import rich.place.ToolsRoom;
+import rich.tool.Tool;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,10 +16,10 @@ import static org.mockito.Mockito.when;
 
 public class ToolsRoomResponseTest {
 
-    private static final int START_POINTS = 40;
-    private static final int WITHIN_BUDGET = 30;
-    private static final int WITHOUT_BUDGET = 50;
-    private static final int POINTS_CAN_BUY_ONE = 40;
+    private static final int ZERO_POINTS = 0;
+    private static final int POINTS_CAN_BUY_ONE = 60;
+    private static final int ENOUGH_POINTS = 3000;
+    private static final int TOOLS_AMOUNT_LIMIT = 10;
 
     private GameMap map;
     private Dice dice;
@@ -43,18 +44,41 @@ public class ToolsRoomResponseTest {
 
     @Test
     public void should_end_turn_if_player_has_not_enough_points() {
-        player = Player.createPlayerWithStartingAndPoints(starting, 0);
+        player = Player.createPlayerWithStartingAndPoints(starting, ZERO_POINTS);
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.END_TURN));
     }
 
     @Test
-    public void should_buy_tools_until_tools_quantity_equals_ten() {
+    public void should_buy_tools_until_points_is_not_enough() {
         player = Player.createPlayerWithStartingAndPoints(starting, POINTS_CAN_BUY_ONE);
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
 
         player.respond(RollCommand.BuyRoadBlock);
         assertThat(player.getToolsAmount(), is(1));
+        assertThat(player.getPoints(), is(POINTS_CAN_BUY_ONE - Tool.RoadBlock.getPoints()));
+        assertThat(player.getState(), is(Player.State.END_TURN));
+    }
+
+    @Test
+    public void should_buy_tools_until_tools_amount_come_to_limit() {
+        player = Player.createPlayerWithStartingAndPoints(starting, ENOUGH_POINTS);
+        player.execute(roll);
+        for (int i = 0; i < TOOLS_AMOUNT_LIMIT - 1; ++i) {
+            player.respond(RollCommand.BuyRoadBlock);
+            assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
+        }
+        player.respond(RollCommand.BuyRoadBlock);
+        assertThat(player.getToolsAmount(), is(TOOLS_AMOUNT_LIMIT));
+        assertThat(player.getState(), is(Player.State.END_TURN));
+    }
+
+    @Test
+    public void should_end_turn_when_player_choose_to_exit() {
+        player = Player.createPlayerWithStartingAndPoints(starting, ENOUGH_POINTS);
+        player.execute(roll);
+        player.respond(RollCommand.ExitToolsHome);
+        assertThat(player.getState(), is(Player.State.END_TURN));
     }
 }
