@@ -59,6 +59,26 @@ public class RollCommand implements Command {
         return Player.State.END_TURN;
     };
 
+    public static Response BuyBomb = player -> {
+        if (player.buyTool(Tool.Bomb)) {
+            if (player.canBuy(ToolsRoom.CHEAPEST_TOOL))
+                return Player.State.WAITING_FOR_RESPONSE;
+            else
+                return Player.State.END_TURN;
+        }
+        return Player.State.END_TURN;
+    };
+
+    public static Response BuyRobot = player -> {
+        if (player.buyTool(Tool.Robot)) {
+            if (player.canBuy(ToolsRoom.CHEAPEST_TOOL))
+                return Player.State.WAITING_FOR_RESPONSE;
+            else
+                return Player.State.END_TURN;
+        }
+        return Player.State.END_TURN;
+    };
+
     public static Response ExitToolsRoom = player -> Player.State.END_TURN;
 
     public static Response ChooseBonus = player -> {

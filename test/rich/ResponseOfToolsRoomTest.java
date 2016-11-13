@@ -50,6 +50,36 @@ public class ResponseOfToolsRoomTest {
     }
 
     @Test
+    public void should_buy_a_road_block() {
+        player = Player.createPlayerWithStartingAndPoints(starting, POINTS_CAN_BUY_ONE);
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
+        player.respond(RollCommand.BuyRoadBlock);
+        assertThat(player.getPoints(), is(POINTS_CAN_BUY_ONE - Tool.RoadBlock.getPoints()));
+        assertThat(player.getToolsAmount(), is(1));
+    }
+
+    @Test
+    public void should_buy_a_bomb() {
+        player = Player.createPlayerWithStartingAndPoints(starting, POINTS_CAN_BUY_ONE);
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
+        player.respond(RollCommand.BuyBomb);
+        assertThat(player.getPoints(), is(POINTS_CAN_BUY_ONE - Tool.Bomb.getPoints()));
+        assertThat(player.getToolsAmount(), is(1));
+    }
+
+    @Test
+    public void should_buy_a_robot() {
+        player = Player.createPlayerWithStartingAndPoints(starting, POINTS_CAN_BUY_ONE);
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
+        player.respond(RollCommand.BuyRobot);
+        assertThat(player.getPoints(), is(POINTS_CAN_BUY_ONE - Tool.Robot.getPoints()));
+        assertThat(player.getToolsAmount(), is(1));
+    }
+
+    @Test
     public void should_buy_tools_until_points_is_not_enough() {
         player = Player.createPlayerWithStartingAndPoints(starting, POINTS_CAN_BUY_ONE);
         player.execute(roll);

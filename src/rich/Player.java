@@ -115,6 +115,7 @@ public class Player {
         player.currentPlace = starting;
         player.points = startPoints;
         player.tools = new HashMap<>();
+        player.toolsAmount = 0;
         return player;
     }
 
