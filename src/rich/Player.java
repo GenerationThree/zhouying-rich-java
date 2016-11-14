@@ -76,7 +76,6 @@ public class Player {
     public static Player createPlayerWithStartingAndBalance(Place starting, int startBalance) {
         Player player = new Player();
         player.currentPlace = starting;
-        player.lands = new ArrayList<>();
         player.balance = startBalance;
         return player;
     }
@@ -104,21 +103,10 @@ public class Player {
         }
     }
 
-    public static Player createPlayerWithBalanceStartingAndOwingLand(int startBalance, Place starting, Land owingLand) {
-        Player player = new Player();
-        player.currentPlace = starting;
-        player.balance = startBalance;
-        player.lands = new ArrayList<>();
-        player.lands.add(owingLand);
-        return player;
-    }
-
     public static Player createPlayerWithStartingAndPoints(Place starting, int startPoints) {
         Player player = new Player();
         player.currentPlace = starting;
         player.points = startPoints;
-        player.tools = new HashMap<>();
-        player.toolsAmount = 0;
         return player;
     }
 

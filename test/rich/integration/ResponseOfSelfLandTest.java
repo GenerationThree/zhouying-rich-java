@@ -18,9 +18,10 @@ import static org.mockito.Mockito.when;
 public class ResponseOfSelfLandTest {
 
     private static final int START_BALANCE = 3000;
-    private static final int UPGRADE_COST = 300;
+    private static final int BUY_OR_UPGRADE_COST = 300;
     private static final int WITHOUT_BUDGET = 999999;
     private static final int TOP_LEVEL = 3;
+    private static final int AFTER_BUY_BALANCE = START_BALANCE - BUY_OR_UPGRADE_COST;
 
     private GameMap map;
     private Dice dice;
@@ -35,16 +36,17 @@ public class ResponseOfSelfLandTest {
         map = mock(GameMap.class);
         dice = mock(Dice.class);
         starting = mock(Place.class);
-        owingLand = Land.createLandWithPrice(UPGRADE_COST);
+        owingLand = Land.createLandWithPrice(BUY_OR_UPGRADE_COST);
         roll = new RollCommand(map, dice);
 
-        player = Player.createPlayerWithBalanceStartingAndOwingLand(START_BALANCE, starting, owingLand);
-        owingLand.setOwner(player);
+        player = Player.createPlayerWithStartingAndBalance(starting, START_BALANCE);
+        player.buy(owingLand);
 
         when(dice.next()).thenReturn(1);
         when(map.move(eq(starting), eq(1))).thenReturn(owingLand);
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
+        assertThat(player.getBalance(), is(AFTER_BUY_BALANCE));
     }
 
     @Test
@@ -52,17 +54,16 @@ public class ResponseOfSelfLandTest {
         player.respond(RollCommand.NoToUpgrade);
         assertThat(player.getState(), is(Player.State.END_TURN));
         assertThat(owingLand.getCurrentLevel(), is(0));
-        assertThat(player.getBalance(), is(START_BALANCE));
     }
 
     @Test
     public void should_upgrade_land_if_player_say_yes() {
-        assertThat(owingLand.roadToll(), is(UPGRADE_COST / 2));
+        assertThat(owingLand.roadToll(), is(BUY_OR_UPGRADE_COST / 2));
         player.respond(RollCommand.YesToUpgrade);
         assertThat(player.getState(), is(Player.State.END_TURN));
-        assertThat(player.getBalance(), is(START_BALANCE - UPGRADE_COST));
+        assertThat(player.getBalance(), is(AFTER_BUY_BALANCE - BUY_OR_UPGRADE_COST));
         assertThat(owingLand.getCurrentLevel(), is(1));
-        assertThat(owingLand.roadToll(), is(UPGRADE_COST));
+        assertThat(owingLand.roadToll(), is(BUY_OR_UPGRADE_COST));
     }
 
     @Test
@@ -70,7 +71,7 @@ public class ResponseOfSelfLandTest {
         owingLand.setPrice(WITHOUT_BUDGET);
         player.respond(RollCommand.YesToUpgrade);
         assertThat(player.getState(), is(Player.State.END_TURN));
-        assertThat(player.getBalance(), is(START_BALANCE));
+        assertThat(player.getBalance(), is(AFTER_BUY_BALANCE));
         assertThat(owingLand.getCurrentLevel(), is(0));
     }
 
@@ -79,7 +80,7 @@ public class ResponseOfSelfLandTest {
         owingLand.setLevel(TOP_LEVEL);
         player.respond(RollCommand.YesToUpgrade);
         assertThat(player.getState(), is(Player.State.END_TURN));
-        assertThat(player.getBalance(), is(START_BALANCE));
+        assertThat(player.getBalance(), is(AFTER_BUY_BALANCE));
         assertThat(owingLand.getCurrentLevel(), is(TOP_LEVEL));
     }
 }

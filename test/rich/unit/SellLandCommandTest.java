@@ -30,11 +30,9 @@ public class SellLandCommandTest {
     public void before() {
         // First, prepare a player with a land
         map = mock(GameMap.class);
-
         player = Player.createPlayerWithBalanceAndAMap(map, START_BALANCE);
         land = Land.createLandWithPrice(LAND_PRICE);
         player.buy(land);
-//        when(map.findBy(eq(POSITION))).thenReturn(land);
 
         assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
         assertThat(player.getLands().size(), is(1));
