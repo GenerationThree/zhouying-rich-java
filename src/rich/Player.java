@@ -67,12 +67,6 @@ public class Player {
         currentPlace = target;
     }
 
-    public static Player createPlayerWithStarting(Place starting) {
-        Player player = new Player();
-        player.currentPlace = starting;
-        return player;
-    }
-
     public static Player createPlayerWithStartingAndBalance(Place starting, int startBalance) {
         Player player = new Player();
         player.currentPlace = starting;

@@ -14,6 +14,7 @@ import rich.tool.Tool;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -28,24 +29,22 @@ public class WaitingForCommandToEndTurnTest {
     private Player player;
     private RollCommand roll;
 
-    private Place starting;
-
     @Before
     public void before() {
         map = mock(GameMap.class);
         dice = mock(Dice.class);
-        starting = mock(Place.class);
         roll = new RollCommand(map, dice);
+        player = new Player();
 
         when(dice.next()).thenReturn(1);
     }
 
     @Test
     public void should_end_turn_when_roll_to_others_land_and_can_afford_road_toll() {
-        player = Player.createPlayerWithStartingAndBalance(starting, BALANCE_CAN_AFFORD_ROAD_TOLL);
         Land othersLand = new Land();
         othersLand.setOwner(new Player());
-        when(map.move(eq(starting), eq(1))).thenReturn(othersLand);
+
+        when(map.move(any(), eq(1))).thenReturn(othersLand);
 
         assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
         player.execute(roll);
@@ -55,10 +54,9 @@ public class WaitingForCommandToEndTurnTest {
 
     @Test
     public void should_game_over_when_roll_to_others_land_but_cant_afford_road_toll() {
-        player = Player.createPlayerWithStartingAndBalance(starting, BALANCE_CANT_AFFORD_ROAD_TOLL);
         Land othersLand = Land.createLandWithPrice(300);
         othersLand.setOwner(new Player());
-        when(map.move(eq(starting), eq(1))).thenReturn(othersLand);
+        when(map.move(any(), eq(1))).thenReturn(othersLand);
 
         assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
         player.execute(roll);
@@ -67,9 +65,8 @@ public class WaitingForCommandToEndTurnTest {
 
     @Test
     public void should_end_turn_when_roll_to_prison() {
-        player = Player.createPlayerWithStarting(starting);
         Place prison = new Prison();
-        when(map.move(eq(starting), eq(1))).thenReturn(prison);
+        when(map.move(any(), eq(1))).thenReturn(prison);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
 
         player.execute(roll);
@@ -79,11 +76,10 @@ public class WaitingForCommandToEndTurnTest {
 
     @Test
     public void should_end_turn_when_roll_through_bomb() {
-        player = Player.createPlayerWithStarting(starting);
         Place place = new Land();
         Tool tool = Tool.Bomb;
         tool.attachTo(place);
-        when(map.move(eq(starting), eq(1))).thenReturn(place);
+        when(map.move(any(), eq(1))).thenReturn(place);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
 
         player.execute(roll);

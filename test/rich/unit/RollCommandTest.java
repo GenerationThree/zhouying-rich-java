@@ -11,6 +11,7 @@ import rich.place.Place;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -20,7 +21,6 @@ public class RollCommandTest {
     private GameMap map;
     private Dice dice;
 
-    private Place starting;
     private Place target;
 
     private Player player;
@@ -30,14 +30,13 @@ public class RollCommandTest {
     public void before() {
         map = mock(GameMap.class);
         dice = mock(Dice.class);
-        starting = mock(Place.class);
         target = mock(Place.class);
 
         roll = new RollCommand(map, dice);
-        player =  Player.createPlayerWithStarting(starting);
+        player = new Player();
 
         when(dice.next()).thenReturn(1);
-        when(map.move(eq(starting), eq(1))).thenReturn(target);
+        when(map.move(any(), eq(1))).thenReturn(target);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
     }
 

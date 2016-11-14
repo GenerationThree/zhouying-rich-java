@@ -14,6 +14,7 @@ import rich.place.Place;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -38,9 +39,9 @@ public class ResponseOfGiftsRoomTest {
 
         roll = new RollCommand(map, dice);
         when(dice.next()).thenReturn(1);
-        when(map.move(eq(starting), eq(1))).thenReturn(giftsRoom);
+        when(map.move(any(), eq(1))).thenReturn(giftsRoom);
 
-        player = Player.createPlayerWithStarting(starting);
+        player = new Player();
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
     }
