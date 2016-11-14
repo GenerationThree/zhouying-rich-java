@@ -25,6 +25,7 @@ public class Player {
     private int toolsAmount;
     private int noPunishTimes;
     private int pauseTimes;
+    private GameMap map;
 
     public int getPoints() {
         return points;
@@ -179,6 +180,42 @@ public class Player {
 
     public void pausedBy(int pauseTimes) {
         this.pauseTimes = pauseTimes;
+    }
+
+    public static Player createPlayerWithPoints(int startPoints) {
+        Player player = new Player();
+        player.points = startPoints;
+        return player;
+    }
+
+    public boolean sellTool(int index) {
+        if (tools.getOrDefault(index, 0) > 0) {
+            tools.put(index, tools.get(index) - 1);
+            toolsAmount -= 1;
+            points += Tool.values()[index].getPoints();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean sellLand(int position) {
+        Place place = map.findBy(position);
+        if (place instanceof Land) {
+            Land cur = (Land) place;
+            if (this == cur.getOwner()) {
+                balance += cur.getPrice();
+                lands.remove(cur);
+                cur.setOwner(null);
+            }
+        }
+        return false;
+    }
+
+    public static Player createPlayerWithBalanceAndAMap(GameMap map, int startBalance) {
+        Player player = new Player();
+        player.map = map;
+        player.balance = startBalance;
+        return player;
     }
 
     public enum State {WAITING_FOR_RESPONSE, END_TURN, GAME_OVER, WAITING_FOR_COMMAND}
