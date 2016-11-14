@@ -3,11 +3,14 @@ package rich.integration;
 import org.junit.Before;
 import org.junit.Test;
 import rich.Dice;
+import rich.GameConstant;
 import rich.GameMap;
 import rich.Player;
 import rich.command.RollCommand;
 import rich.place.Land;
 import rich.place.Place;
+import rich.place.Prison;
+import rich.tool.Tool;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,7 +29,6 @@ public class WaitingForCommandToEndTurnTest {
     private RollCommand roll;
 
     private Place starting;
-    private Place target;
 
     @Before
     public void before() {
@@ -36,7 +38,6 @@ public class WaitingForCommandToEndTurnTest {
         roll = new RollCommand(map, dice);
 
         when(dice.next()).thenReturn(1);
-        when(map.move(eq(starting), eq(1))).thenReturn(target);
     }
 
     @Test
@@ -63,4 +64,30 @@ public class WaitingForCommandToEndTurnTest {
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.GAME_OVER));
     }
+
+    @Test
+    public void should_end_turn_when_roll_to_prison() {
+        player = Player.createPlayerWithStarting(starting);
+        Place prison = new Prison();
+        when(map.move(eq(starting), eq(1))).thenReturn(prison);
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
+
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.END_TURN));
+        assertThat(player.getPauseTimes(), is(GameConstant.PRISON_PAUSED_TIMES));
+    }
+
+    @Test
+    public void should_end_turn_when_roll_through_bomb() {
+        player = Player.createPlayerWithStarting(starting);
+        Place place = new Land();
+        Tool tool = Tool.Bomb;
+        tool.attachTo(place);
+        when(map.move(eq(starting), eq(1))).thenReturn(place);
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
+
+        player.execute(roll);
+        assertThat(player.getState(), is(Player.State.END_TURN));
+    }
+
 }

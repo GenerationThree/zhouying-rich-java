@@ -1,5 +1,7 @@
 package rich.tool;
 
+import rich.place.Place;
+
 public enum Tool {
     RoadBlock {
         @Override
@@ -19,4 +21,8 @@ public enum Tool {
     };
 
     abstract public int getPoints();
+
+    public boolean attachTo(Place place) {
+        return place.attachedBy(this);
+    }
 }

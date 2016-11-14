@@ -1,6 +1,8 @@
 package rich.place;
 
+import rich.GameConstant;
 import rich.Player;
+import rich.tool.Tool;
 
 public class Land implements Place {
     private static final int TOP_LEVEL = 3;
@@ -8,10 +10,12 @@ public class Land implements Place {
     private int currentLevel;
     private int price;
     private int roadToll;
+    private Tool attachedTool;
 
     public Land() {
         currentLevel = 0;
         owner = null;
+        attachedTool = null;
     }
 
     public Player getOwner() {
@@ -73,6 +77,11 @@ public class Land implements Place {
 
     @Override
     public Player.State actionTo(Player player) {
+        if (attachedTool != null && attachedTool.ordinal() == Tool.Bomb.ordinal()) {
+            player.pausedBy(GameConstant.BOMB_PAUSED_TIMES);
+            return Player.State.END_TURN;
+        }
+
         if (owner != null && owner != player) {
             if (player.canAfford(this.price)) {
                 player.pay(this.price);
@@ -88,6 +97,19 @@ public class Land implements Place {
         else {
             return Player.State.WAITING_FOR_RESPONSE;
         }
+    }
+
+    @Override
+    public boolean attachedBy(Tool tool) {
+        if (canToolBeAttached()) {
+            this.attachedTool = tool;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean canToolBeAttached() {
+        return attachedTool == null;
     }
 
     public void setOwner(Player owner) {

@@ -24,6 +24,7 @@ public class Player {
     private int points;
     private int toolsAmount;
     private int noPunishTimes;
+    private int pauseTimes;
 
     public int getPoints() {
         return points;
@@ -38,6 +39,7 @@ public class Player {
         this.points = 0;
         this.toolsAmount = 0;
         this.noPunishTimes = 0;
+        this.pauseTimes = 0;
     }
 
     public State getState() {
@@ -169,6 +171,14 @@ public class Player {
 
     public void pay(int price) {
         balance -= price;
+    }
+
+    public int getPauseTimes() {
+        return pauseTimes;
+    }
+
+    public void pausedBy(int pauseTimes) {
+        this.pauseTimes = pauseTimes;
     }
 
     public enum State {WAITING_FOR_RESPONSE, END_TURN, GAME_OVER, WAITING_FOR_COMMAND}
