@@ -97,13 +97,6 @@ public class Player {
         }
     }
 
-    public static Player createPlayerWithStartingAndPoints(Place starting, int startPoints) {
-        Player player = new Player();
-        player.currentPlace = starting;
-        player.points = startPoints;
-        return player;
-    }
-
     public boolean buyTool(Tool tool) {
         if (canBuy(tool)) {
             points -= tool.getPoints();

@@ -13,6 +13,7 @@ import rich.tool.Tool;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -28,7 +29,6 @@ public class ResponseOfToolsRoomTest {
     private Dice dice;
 
     private Place toolsRoom;
-    private Place starting;
 
     private Player player;
     private Command roll;
@@ -37,24 +37,24 @@ public class ResponseOfToolsRoomTest {
     public void before() {
         map = mock(GameMap.class);
         dice = mock(Dice.class);
-        starting = mock(Place.class);
         toolsRoom = new ToolsRoom();
 
         roll = new RollCommand(map, dice);
         when(dice.next()).thenReturn(1);
-        when(map.move(eq(starting), eq(1))).thenReturn(toolsRoom);
+        when(map.move(any(), eq(1))).thenReturn(toolsRoom);
     }
 
     @Test
     public void should_end_turn_if_player_has_not_enough_points() {
-        player = Player.createPlayerWithStartingAndPoints(starting, ZERO_POINTS);
+        player = Player.createPlayerWithPoints(ZERO_POINTS);
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.END_TURN));
     }
 
     @Test
     public void should_buy_a_road_block() {
-        player = Player.createPlayerWithStartingAndPoints(starting, POINTS_CAN_BUY_ONE);
+        player = Player.createPlayerWithPoints(POINTS_CAN_BUY_ONE);
+
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
         player.respond(RollCommand.BuyRoadBlock);
@@ -64,7 +64,7 @@ public class ResponseOfToolsRoomTest {
 
     @Test
     public void should_buy_a_bomb() {
-        player = Player.createPlayerWithStartingAndPoints(starting, POINTS_CAN_BUY_ONE);
+        player = Player.createPlayerWithPoints(POINTS_CAN_BUY_ONE);
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
         player.respond(RollCommand.BuyBomb);
@@ -74,7 +74,8 @@ public class ResponseOfToolsRoomTest {
 
     @Test
     public void should_buy_a_robot() {
-        player = Player.createPlayerWithStartingAndPoints(starting, POINTS_CAN_BUY_ONE);
+        player = Player.createPlayerWithPoints(POINTS_CAN_BUY_ONE);
+
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
         player.respond(RollCommand.BuyRobot);
@@ -84,7 +85,8 @@ public class ResponseOfToolsRoomTest {
 
     @Test
     public void should_buy_tools_until_points_is_not_enough() {
-        player = Player.createPlayerWithStartingAndPoints(starting, POINTS_CAN_BUY_ONE);
+        player = Player.createPlayerWithPoints(POINTS_CAN_BUY_ONE);
+
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_RESPONSE));
 
@@ -96,7 +98,8 @@ public class ResponseOfToolsRoomTest {
 
     @Test
     public void should_buy_tools_until_tools_amount_come_to_limit() {
-        player = Player.createPlayerWithStartingAndPoints(starting, ENOUGH_POINTS);
+        player = Player.createPlayerWithPoints(ENOUGH_POINTS);
+
         player.execute(roll);
         for (int i = 0; i < TOOLS_AMOUNT_LIMIT - 1; ++i) {
             player.respond(RollCommand.BuyRoadBlock);
@@ -109,7 +112,7 @@ public class ResponseOfToolsRoomTest {
 
     @Test
     public void should_end_turn_when_player_choose_to_exit() {
-        player = Player.createPlayerWithStartingAndPoints(starting, ENOUGH_POINTS);
+        player = Player.createPlayerWithPoints(ENOUGH_POINTS);
         player.execute(roll);
         player.respond(RollCommand.ExitToolsRoom);
         assertThat(player.getState(), is(Player.State.END_TURN));
