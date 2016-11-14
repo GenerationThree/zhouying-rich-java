@@ -1,20 +1,18 @@
 package rich.place;
 
-import rich.GameConstant;
 import rich.Player;
 import rich.tool.Tool;
 
-public class Prison implements Place {
+public class Starting implements Place {
     private Tool attachedTool;
 
-    public Prison() {
-        this.attachedTool = null;
+    public Starting() {
+        attachedTool = null;
     }
 
     @Override
     public Player.State actionTo(Player player) {
-        player.pausedBy(GameConstant.PRISON_PAUSED_TIMES);
-        return Player.State.END_TURN;
+        return null;
     }
 
     @Override
@@ -31,12 +29,12 @@ public class Prison implements Place {
         attachedTool = null;
     }
 
+    private boolean canToolBeAttached() {
+        return attachedTool == null;
+    }
+
     @Override
     public boolean isToolAttached() {
         return attachedTool != null;
-    }
-
-    private boolean canToolBeAttached() {
-        return attachedTool == null;
     }
 }

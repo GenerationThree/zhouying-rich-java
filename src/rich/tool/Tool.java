@@ -23,6 +23,6 @@ public enum Tool {
     abstract public int getPoints();
 
     public boolean attachTo(Place place) {
-        return place.attachedBy(this);
+        return place.attach(this);
     }
 }

@@ -18,6 +18,13 @@ public class Land implements Place {
         attachedTool = null;
     }
 
+    public Land(int price) {
+        currentLevel = 0;
+        owner = null;
+        attachedTool = null;
+        this.price = price;
+    }
+
     public Player getOwner() {
         return owner;
     }
@@ -100,12 +107,22 @@ public class Land implements Place {
     }
 
     @Override
-    public boolean attachedBy(Tool tool) {
+    public boolean attach(Tool tool) {
         if (canToolBeAttached()) {
             this.attachedTool = tool;
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean isToolAttached() {
+        return attachedTool != null;
+    }
+
+    @Override
+    public void clearTool() {
+        attachedTool = null;
     }
 
     private boolean canToolBeAttached() {

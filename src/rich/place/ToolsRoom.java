@@ -19,14 +19,24 @@ public class ToolsRoom implements Place {
         return Player.State.END_TURN;
     }
 
+    @Override
+    public void clearTool() {
+        attachedTool = null;
+    }
+
 
     @Override
-    public boolean attachedBy(Tool tool) {
+    public boolean attach(Tool tool) {
         if (canToolBeAttached()) {
             this.attachedTool = tool;
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean isToolAttached() {
+        return attachedTool != null;
     }
 
     private boolean canToolBeAttached() {

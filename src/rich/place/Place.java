@@ -6,5 +6,9 @@ import rich.tool.Tool;
 public interface Place {
     Player.State actionTo(Player player);
 
-    boolean attachedBy(Tool tool);
+    boolean attach(Tool tool);
+
+    boolean isToolAttached();
+
+    void clearTool();
 }

@@ -17,12 +17,22 @@ public class GiftsRoom implements Place {
 
 
     @Override
-    public boolean attachedBy(Tool tool) {
+    public boolean attach(Tool tool) {
         if (canToolBeAttached()) {
             this.attachedTool = tool;
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean isToolAttached() {
+        return attachedTool != null;
+    }
+
+    @Override
+    public void clearTool() {
+        attachedTool = null;
     }
 
     private boolean canToolBeAttached() {
