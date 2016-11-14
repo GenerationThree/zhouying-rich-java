@@ -125,6 +125,11 @@ public class Land implements Place {
         attachedTool = null;
     }
 
+    @Override
+    public Tool attachedToolType() {
+        return attachedTool;
+    }
+
     private boolean canToolBeAttached() {
         return attachedTool == null;
     }

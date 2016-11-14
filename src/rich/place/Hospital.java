@@ -37,4 +37,9 @@ public class Hospital implements Place {
     public void clearTool() {
         attachedTool = null;
     }
+
+    @Override
+    public Tool attachedToolType() {
+        return attachedTool;
+    }
 }

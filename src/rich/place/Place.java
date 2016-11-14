@@ -11,4 +11,7 @@ public interface Place {
     boolean isToolAttached();
 
     void clearTool();
+
+    Tool attachedToolType();
+
 }

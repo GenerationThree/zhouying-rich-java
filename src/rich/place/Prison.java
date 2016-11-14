@@ -32,6 +32,11 @@ public class Prison implements Place {
     }
 
     @Override
+    public Tool attachedToolType() {
+        return attachedTool;
+    }
+
+    @Override
     public boolean isToolAttached() {
         return attachedTool != null;
     }

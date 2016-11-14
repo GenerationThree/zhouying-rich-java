@@ -26,7 +26,7 @@ public class BlockCommandTest {
 
     @Test
     public void should_block_a_position() {
-        when(map.setBlock(eq(POSITION))).thenReturn(true);
+        when(map.putBlock(eq(POSITION))).thenReturn(true);
 
         Player player = Player.createPlayerWithBalanceAndAMap(map, 0);
         Command block = new BlockCommand(POSITION);
@@ -37,7 +37,7 @@ public class BlockCommandTest {
 
     @Test
     public void should_not_block_a_position() {
-        when(map.setBlock(eq(POSITION))).thenReturn(false);
+        when(map.putBlock(eq(POSITION))).thenReturn(false);
 
         Player player = Player.createPlayerWithBalanceAndAMap(map, 0);
         Command block = new BlockCommand(POSITION);

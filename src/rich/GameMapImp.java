@@ -12,9 +12,11 @@ import static rich.GameConstant.*;
 
 public class GameMapImp implements GameMap {
     private List<Place> places;
+    private int hospitalLocation;
 
     public GameMapImp() {
         this.places = new ArrayList<>();
+        this.hospitalLocation = 0;
         addStarting();
         addLandOfDistrict(FIRST_DISTRICT_PRICE, FIRST_DISTRICT_LANDS);
         addHospital();
@@ -56,6 +58,7 @@ public class GameMapImp implements GameMap {
 
     private void addHospital() {
         places.add(new Hospital());
+        hospitalLocation = places.size() - 1;
     }
 
     private void addLandOfDistrict(int districtPrice, int landsAmount) {
@@ -71,21 +74,41 @@ public class GameMapImp implements GameMap {
     @Override
     public Place move(Place currentPlace, int next) {
         int curPosition = places.indexOf(currentPlace);
-        int stopPosition = scanBlock(curPosition, next);
 
-        return places.get((curPosition + stopPosition) % places.size());
+        int blockDistance = scanBlock(curPosition, next);
+        int bombDistance = scanBomb(curPosition, next);
+
+        Place ret;
+        if (blockDistance > next && bombDistance > next) {
+            ret = places.get((curPosition + next) % places.size());
+        } else if (blockDistance < bombDistance) {
+            ret = places.get((curPosition + blockDistance) % places.size());
+            ret.clearTool();
+        } else {
+            ret = hospital();
+            ret.clearTool();
+        }
+        return ret;
     }
 
     private int scanBlock(int curPosition, int next) {
         for (int step = 1; step <= next; ++step) {
             Place cur = places.get((curPosition + step) % places.size());
             if (cur.isToolAttached() || cur instanceof Prison) {
-                // Clear tool when hit player
-                cur.clearTool();
                 return step;
             }
         }
-        return next;
+        return next + 1;  // means no block
+    }
+
+    private int scanBomb(int curPosition, int next) {
+        for (int step = 1; step <= next; ++step) {
+            Place cur = places.get((curPosition + step) % places.size());
+            if (cur.attachedToolType() == Tool.Bomb) {
+                return step;
+            }
+        }
+        return next + 1; // means no bomb
     }
 
     @Override
@@ -94,7 +117,7 @@ public class GameMapImp implements GameMap {
     }
 
     @Override
-    public boolean setBlock(int position) {
+    public boolean putBlock(int position) {
         Place cur = places.get(position);
         if (cur.attach(Tool.RoadBlock)) return true;
         return false;
@@ -102,5 +125,15 @@ public class GameMapImp implements GameMap {
 
     public int length() {
         return places.size();
+    }
+
+    public Place hospital() {
+        return places.get(hospitalLocation);
+    }
+
+    public boolean putBomb(int position) {
+        Place cur = places.get(position);
+        if (cur.attach(Tool.Bomb)) return true;
+        return false;
     }
 }

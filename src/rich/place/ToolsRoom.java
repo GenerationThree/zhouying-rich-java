@@ -24,6 +24,11 @@ public class ToolsRoom implements Place {
         attachedTool = null;
     }
 
+    @Override
+    public Tool attachedToolType() {
+        return attachedTool;
+    }
+
 
     @Override
     public boolean attach(Tool tool) {

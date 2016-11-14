@@ -7,5 +7,5 @@ public interface GameMap {
 
     Place findBy(int position);
 
-    boolean setBlock(int position);
+    boolean putBlock(int position);
 }
