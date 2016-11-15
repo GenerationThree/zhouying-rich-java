@@ -1,8 +1,8 @@
 package rich.command;
 
-import rich.Dice;
-import rich.GameMap;
-import rich.Player;
+import rich.application.Dice;
+import rich.application.GameMap;
+import rich.application.Player;
 import rich.place.Land;
 import rich.place.Place;
 import rich.place.ToolsRoom;

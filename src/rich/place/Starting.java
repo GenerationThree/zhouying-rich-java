@@ -1,6 +1,6 @@
 package rich.place;
 
-import rich.Player;
+import rich.application.Player;
 
 public class Starting extends Place {
 

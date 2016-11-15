@@ -2,9 +2,9 @@ package rich.unit;
 
 import org.junit.Before;
 import org.junit.Test;
-import rich.Dice;
-import rich.GameMapImp;
-import rich.Player;
+import rich.application.Dice;
+import rich.application.GameMapImp;
+import rich.application.Player;
 import rich.command.BombCommand;
 import rich.command.Command;
 

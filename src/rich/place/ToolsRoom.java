@@ -1,6 +1,6 @@
 package rich.place;
 
-import rich.Player;
+import rich.application.Player;
 import rich.tool.Tool;
 
 public class ToolsRoom extends Place {

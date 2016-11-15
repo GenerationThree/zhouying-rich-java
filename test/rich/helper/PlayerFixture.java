@@ -1,6 +1,6 @@
 package rich.helper;
 
-import rich.Player;
+import rich.application.Player;
 import rich.place.Land;
 import rich.tool.Tool;
 

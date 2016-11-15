@@ -2,8 +2,8 @@ package rich.unit;
 
 import org.junit.Before;
 import org.junit.Test;
-import rich.GameMapImp;
-import rich.Player;
+import rich.application.GameMapImp;
+import rich.application.Player;
 import rich.command.Command;
 import rich.command.RobotCommand;
 import rich.place.Place;

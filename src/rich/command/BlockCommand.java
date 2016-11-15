@@ -1,7 +1,7 @@
 package rich.command;
 
 import com.sun.xml.internal.ws.server.UnsupportedMediaException;
-import rich.Player;
+import rich.application.Player;
 
 public class BlockCommand implements Command {
     private int step;

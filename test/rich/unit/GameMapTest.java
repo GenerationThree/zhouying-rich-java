@@ -2,8 +2,8 @@ package rich.unit;
 
 import org.junit.Before;
 import org.junit.Test;
-import rich.GameConstant;
-import rich.GameMapImp;
+import rich.application.GameConstant;
+import rich.application.GameMapImp;
 import rich.place.Land;
 import rich.place.Place;
 

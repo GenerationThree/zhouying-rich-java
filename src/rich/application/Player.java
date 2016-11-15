@@ -1,4 +1,4 @@
-package rich;
+package rich.application;
 
 import rich.command.Command;
 import rich.command.Response;
@@ -23,6 +23,20 @@ public class Player {
     private int noPunishTimes;
     private int pauseTimes;
     private GameMapImp map;
+    private String name;
+
+    public Player(String name, int balance) {
+        this.name = name;
+        this.state = State.WAITING_FOR_COMMAND;
+        this.lastExecuted = null;
+        this.lands = new ArrayList<>();
+        this.tools = new HashMap<>();
+        this.balance = balance;
+        this.points = 0;
+        this.toolsAmount = 0;
+        this.noPunishTimes = 0;
+        this.pauseTimes = 0;
+    }
 
     public int getPoints() {
         return points;
@@ -283,6 +297,10 @@ public class Player {
                 "help: 查看命令帮助\n" +
                 "quit: 强制退出\n";
         return ret;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public enum State {WAITING_FOR_RESPONSE, END_TURN, GAME_OVER, WAITING_FOR_COMMAND}

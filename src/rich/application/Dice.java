@@ -1,4 +1,4 @@
-package rich;
+package rich.application;
 
 public interface Dice {
     int next();

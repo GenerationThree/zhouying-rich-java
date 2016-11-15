@@ -1,4 +1,4 @@
-package rich;
+package rich.application;
 
 import rich.place.*;
 import rich.tool.Tool;
@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static rich.GameConstant.*;
-
 public class GameMapImp implements GameMap{
     private List<Place> places;
     private int hospitalLocation;
@@ -18,15 +16,15 @@ public class GameMapImp implements GameMap{
         this.places = new ArrayList<>();
         this.hospitalLocation = 0;
         addStarting();
-        addLandOfDistrict(FIRST_DISTRICT_PRICE, FIRST_DISTRICT_LANDS);
+        addLandOfDistrict(GameConstant.FIRST_DISTRICT_PRICE, GameConstant.FIRST_DISTRICT_LANDS);
         addHospital();
-        addLandOfDistrict(SECOND_DISTRICT_PRICE, SECOND_DISTRICT_LANDS);
+        addLandOfDistrict(GameConstant.SECOND_DISTRICT_PRICE, GameConstant.SECOND_DISTRICT_LANDS);
         addToolsRoom();
-        addLandOfDistrict(THIRD_DISTRICT_PRICE, THIRD_DISTRICT_LANDS);
+        addLandOfDistrict(GameConstant.THIRD_DISTRICT_PRICE, GameConstant.THIRD_DISTRICT_LANDS);
         addGiftsRoom();
-        addLandOfDistrict(FOURTH_DISTRICT_PRICE, FOURTH_DISTRICT_LANDS);
+        addLandOfDistrict(GameConstant.FOURTH_DISTRICT_PRICE, GameConstant.FOURTH_DISTRICT_LANDS);
         addPrison();
-        addLandOfDistrict(FIFTH_DISTRICT_PRICE, FIFTH_DISTRICT_LANDS);
+        addLandOfDistrict(GameConstant.FIFTH_DISTRICT_PRICE, GameConstant.FIFTH_DISTRICT_LANDS);
         addMagicRoom();
         addMineralLand();
     }

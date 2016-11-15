@@ -2,9 +2,8 @@ package rich.unit;
 
 import org.junit.Before;
 import org.junit.Test;
-import rich.GameMap;
-import rich.GameMapImp;
-import rich.Player;
+import rich.application.GameMapImp;
+import rich.application.Player;
 import rich.command.Command;
 import rich.command.SellLandCommand;
 import rich.place.Land;

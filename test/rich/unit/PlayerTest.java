@@ -2,7 +2,7 @@ package rich.unit;
 
 import org.junit.Before;
 import org.junit.Test;
-import rich.Player;
+import rich.application.Player;
 import rich.command.Command;
 import rich.command.Response;
 

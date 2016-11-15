@@ -1,6 +1,6 @@
 package rich.tool;
 
-import rich.Player;
+import rich.application.Player;
 import rich.place.Place;
 
 public enum Tool {

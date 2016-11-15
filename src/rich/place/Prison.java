@@ -1,7 +1,7 @@
 package rich.place;
 
-import rich.GameConstant;
-import rich.Player;
+import rich.application.GameConstant;
+import rich.application.Player;
 
 public class Prison extends Place {
 

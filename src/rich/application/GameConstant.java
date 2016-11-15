@@ -1,4 +1,4 @@
-package rich;
+package rich.application;
 
 public class GameConstant {
     public static final int MONEY_BONUS = 2000;
@@ -33,6 +33,7 @@ public class GameConstant {
     public static final int BLOCK_LIMIT_STEP = 10;
     public static final int BOMB_LIMIT_STEP = 10;
     public static final int ROBOT_CLEAR_RANGE = 10;
+    public static final int DEFAULT_STARTING_BALANCE = 10000;
 
 
 }

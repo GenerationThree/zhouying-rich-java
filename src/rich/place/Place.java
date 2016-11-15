@@ -1,6 +1,6 @@
 package rich.place;
 
-import rich.Player;
+import rich.application.Player;
 import rich.tool.Tool;
 
 import java.util.ArrayList;
