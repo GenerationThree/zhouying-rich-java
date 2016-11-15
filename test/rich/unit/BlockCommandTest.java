@@ -2,10 +2,13 @@ package rich.unit;
 
 import org.junit.Before;
 import org.junit.Test;
-import rich.GameMap;
+import rich.Dice;
+import rich.GameMapImp;
 import rich.Player;
 import rich.command.BlockCommand;
 import rich.command.Command;
+import rich.command.RollCommand;
+import rich.tool.Tool;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,11 +20,13 @@ public class BlockCommandTest {
 
     private static final int POSITION = 1;
 
-    GameMap map;
+    GameMapImp map;
+    Dice dice;
 
     @Before
     public void before() {
-        map = mock(GameMap.class);
+        map = mock(GameMapImp.class);
+        dice = mock(Dice.class);
     }
 
     @Test
@@ -44,6 +49,17 @@ public class BlockCommandTest {
 
         player.execute(block);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
+    }
+
+    @Test
+    public void should_not_block_a_place_when_there_is_another_player() {
+        GameMapImp realMap = new GameMapImp();
+        Player player = Player.createPlayerWithStartingAndBalance(realMap.starting(), 0);
+
+        when(dice.next()).thenReturn(3);
+        player.execute(new RollCommand(realMap, dice));
+        assertThat(player.getCurrentPlace().isPlayerOn(), is(true));
+        player.execute(new BlockCommand(0));
     }
 
 }

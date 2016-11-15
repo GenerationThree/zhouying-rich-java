@@ -32,7 +32,7 @@ public class GameMapTest {
 
     @Test
     public void should_find_place_by_position() {
-        Place target = gameMap.findBy(0);
+        Place target = gameMap.findByPosition(0);
         assertThat(target, is(gameMap.starting()));
     }
 
@@ -40,7 +40,7 @@ public class GameMapTest {
     public void should_set_block_and_stop_player() {
         int position = 3;
         gameMap.putBlock(position);
-        Place expectedTarget = gameMap.findBy(position);
+        Place expectedTarget = gameMap.findByPosition(position);
         assertThat(expectedTarget.isToolAttached(), is(true));
 
         // when there is a block, can't across it

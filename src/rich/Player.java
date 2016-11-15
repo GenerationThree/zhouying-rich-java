@@ -11,9 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static rich.tool.Tool.RoadBlock;
-import static rich.tool.Tool.Robot;
-
 public class Player {
     private State state;
     private Command lastExecuted;
@@ -25,7 +22,7 @@ public class Player {
     private int toolsAmount;
     private int noPunishTimes;
     private int pauseTimes;
-    private GameMap map;
+    private GameMapImp map;
 
     public int getPoints() {
         return points;
@@ -65,6 +62,7 @@ public class Player {
 
     public void moveTo(Place target) {
         currentPlace = target;
+        target.setPlayerOn(this);
     }
 
     public static Player createPlayerWithStartingAndBalance(Place starting, int startBalance) {
@@ -165,7 +163,7 @@ public class Player {
     }
 
     public boolean sellLand(int position) {
-        Place place = map.findBy(position);
+        Place place = map.findByPosition(position);
         if (place instanceof Land) {
             Land cur = (Land) place;
             if (this == cur.getOwner()) {
@@ -177,7 +175,7 @@ public class Player {
         return false;
     }
 
-    public static Player createPlayerWithBalanceAndAMap(GameMap map, int startBalance) {
+    public static Player createPlayerWithBalanceAndAMap(GameMapImp map, int startBalance) {
         Player player = new Player();
         player.map = map;
         player.balance = startBalance;
@@ -224,6 +222,38 @@ public class Player {
         player.balance = balance;
         player.points = points;
         return player;
+    }
+
+    public boolean putBomb(int steps) {
+        if (tools.getOrDefault(Tool.Bomb.ordinal(), 0) == 0)
+            return false;
+
+        int curPosition = map.findByPlace(currentPlace);
+        int targetPosition = curPosition + steps;
+        if (targetPosition < 0) targetPosition += map.length();
+        Place targetPlace = map.findByPosition(targetPosition);
+
+        if (targetPlace.tryToAttachTool(Tool.Bomb)) {
+            tools.put(Tool.Bomb.ordinal(), tools.get(Tool.Bomb.ordinal()) - 1);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean putBlock(int steps) {
+        if (tools.getOrDefault(Tool.RoadBlock.ordinal(), 0) == 0)
+            return false;
+
+        int curPosition = map.findByPlace(currentPlace);
+        int targetPosition = curPosition + steps;
+        if (targetPosition < 0) targetPosition += map.length();
+        Place targetPlace = map.findByPosition(targetPosition);
+
+        if (targetPlace.tryToAttachTool(Tool.RoadBlock)) {
+            tools.put(Tool.RoadBlock.ordinal(), tools.get(Tool.RoadBlock.ordinal()) - 1);
+            return true;
+        }
+        return false;
     }
 
     public enum State {WAITING_FOR_RESPONSE, END_TURN, GAME_OVER, WAITING_FOR_COMMAND}

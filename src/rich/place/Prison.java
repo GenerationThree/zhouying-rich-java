@@ -4,11 +4,16 @@ import rich.GameConstant;
 import rich.Player;
 import rich.tool.Tool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Prison implements Place {
     private Tool attachedTool;
+    private List<Player> playersOn;
 
     public Prison() {
         this.attachedTool = null;
+        playersOn = new ArrayList<>();
     }
 
     @Override
@@ -18,7 +23,7 @@ public class Prison implements Place {
     }
 
     @Override
-    public boolean attach(Tool tool) {
+    public boolean tryToAttachTool(Tool tool) {
         if (canToolBeAttached()) {
             this.attachedTool = tool;
             return true;
@@ -41,7 +46,17 @@ public class Prison implements Place {
         return attachedTool != null;
     }
 
+    @Override
+    public boolean isPlayerOn() {
+        return playersOn.size() > 0;
+    }
+
+    @Override
+    public void setPlayerOn(Player player) {
+        playersOn.add(player);
+    }
+
     private boolean canToolBeAttached() {
-        return attachedTool == null;
+        return attachedTool == null && playersOn.size() == 0;
     }
 }

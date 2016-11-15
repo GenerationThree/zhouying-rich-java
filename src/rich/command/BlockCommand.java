@@ -4,14 +4,15 @@ import com.sun.xml.internal.ws.server.UnsupportedMediaException;
 import rich.Player;
 
 public class BlockCommand implements Command {
-    private int position;
+    private int step;
 
-    public BlockCommand(int position) {
-        this.position = position;
+    public BlockCommand(int step) {
+        this.step = step;
     }
 
     @Override
     public Player.State execute(Player player) {
+        player.putBomb(step);
         return Player.State.WAITING_FOR_COMMAND;
     }
 

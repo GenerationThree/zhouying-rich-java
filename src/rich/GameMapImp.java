@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import static rich.GameConstant.*;
 
-public class GameMapImp implements GameMap {
+public class GameMapImp implements GameMap{
     private List<Place> places;
     private int hospitalLocation;
 
@@ -111,15 +111,20 @@ public class GameMapImp implements GameMap {
         return next + 1; // means no bomb
     }
 
-    @Override
-    public Place findBy(int position) {
+    public Place findByPosition(int position) {
         return places.get(position);
     }
 
-    @Override
+    public int findByPlace(Place place) {
+        for (int i = 0; i < places.size(); ++i) {
+            if (place == places.get(i)) return i;
+        }
+        return -1;
+    }
+
     public boolean putBlock(int position) {
         Place cur = places.get(position);
-        if (cur.attach(Tool.RoadBlock)) return true;
+        if (cur.tryToAttachTool(Tool.RoadBlock)) return true;
         return false;
     }
 
@@ -133,7 +138,7 @@ public class GameMapImp implements GameMap {
 
     public boolean putBomb(int position) {
         Place cur = places.get(position);
-        if (cur.attach(Tool.Bomb)) return true;
+        if (cur.tryToAttachTool(Tool.Bomb)) return true;
         return false;
     }
 }

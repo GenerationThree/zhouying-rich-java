@@ -4,6 +4,9 @@ import rich.GameConstant;
 import rich.Player;
 import rich.tool.Tool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Land implements Place {
     private static final int TOP_LEVEL = 3;
     private Player owner;
@@ -11,11 +14,13 @@ public class Land implements Place {
     private int price;
     private int roadToll;
     private Tool attachedTool;
+    private List<Player> playersOn;
 
     public Land() {
         currentLevel = 0;
         owner = null;
         attachedTool = null;
+        playersOn = new ArrayList<>();
     }
 
     public Land(int price) {
@@ -23,6 +28,7 @@ public class Land implements Place {
         owner = null;
         attachedTool = null;
         this.price = price;
+        playersOn = new ArrayList<>();
     }
 
     public Player getOwner() {
@@ -40,6 +46,7 @@ public class Land implements Place {
     public static Land createLandWithPrice(int price) {
         Land land = new Land();
         land.price = price;
+        land.playersOn = new ArrayList<>();
         return land;
     }
 
@@ -107,7 +114,7 @@ public class Land implements Place {
     }
 
     @Override
-    public boolean attach(Tool tool) {
+    public boolean tryToAttachTool(Tool tool) {
         if (canToolBeAttached()) {
             this.attachedTool = tool;
             return true;
@@ -130,8 +137,18 @@ public class Land implements Place {
         return attachedTool;
     }
 
+    @Override
+    public boolean isPlayerOn() {
+        return playersOn.size() > 0;
+    }
+
+    @Override
+    public void setPlayerOn(Player player) {
+        playersOn.add(player);
+    }
+
     private boolean canToolBeAttached() {
-        return attachedTool == null;
+        return attachedTool == null && playersOn.size() == 0;
     }
 
     public void setOwner(Player owner) {
