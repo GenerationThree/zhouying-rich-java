@@ -101,16 +101,7 @@ public class Player {
         if (canBuy(tool)) {
             points -= tool.getPoints();
             toolsAmount += 1;
-            if (tool.ordinal() == RoadBlock.ordinal()) {
-                int curNum = tools.getOrDefault(tool.ordinal(), 0);
-                tools.put(RoadBlock.ordinal(), curNum + 1);
-            } else if (tool.ordinal() == Robot.ordinal()) {
-                int curNum = tools.getOrDefault(tool.ordinal(), 0);
-                tools.put(RoadBlock.ordinal(), curNum + 1);
-            } else {
-                int curNum = tools.getOrDefault(tool.ordinal(), 0);
-                tools.put(RoadBlock.ordinal(), curNum + 1);
-            }
+            tools.put(tool.ordinal(), tools.getOrDefault(tool.ordinal(), 0) + 1);
             return true;
         }
         return false;
@@ -190,6 +181,48 @@ public class Player {
         Player player = new Player();
         player.map = map;
         player.balance = startBalance;
+        return player;
+    }
+
+    public String query() {
+        int zeroLevelAmount = 0;
+        int oneLevelAmount = 0;
+        int twoLevelAmount = 0;
+        int threeLevelAmount = 0;
+        for (Land land: lands) {
+            switch (land.getCurrentLevel()) {
+                case 0:
+                    zeroLevelAmount += 1;
+                    break;
+                case 1:
+                    oneLevelAmount += 1;
+                    break;
+                case 2:
+                    twoLevelAmount += 1;
+                    break;
+                case 3:
+                    threeLevelAmount += 1;
+                    break;
+            }
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append("资金: $").append(balance).append("\n")
+                .append("点数: ").append(points).append("\n")
+                .append("地产: ").append("空地 :").append(zeroLevelAmount).append("处; ")
+                .append("茅屋: ").append(oneLevelAmount).append("处; ")
+                .append("洋房: ").append(twoLevelAmount).append("处; ")
+                .append("摩天楼: ").append(threeLevelAmount).append("处\n")
+                .append("道具: ")
+                .append("路障: ").append(tools.getOrDefault(Tool.RoadBlock.ordinal(), 0)).append("个; ")
+                .append("炸弹: ").append(tools.getOrDefault(Tool.Bomb.ordinal(), 0)).append("个; ")
+                .append("机器娃娃: ").append(tools.getOrDefault(Tool.Robot.ordinal(), 0)).append("个\n ");
+        return builder.toString();
+    }
+
+    public static Player createWithBalanceAndPoints(int balance, int points) {
+        Player player = new Player();
+        player.balance = balance;
+        player.points = points;
         return player;
     }
 
