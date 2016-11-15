@@ -142,7 +142,7 @@ public class Player {
         return pauseTimes;
     }
 
-    public void pausedBy(int pauseTimes) {
+    public void setPauseTime(int pauseTimes) {
         this.pauseTimes = pauseTimes;
     }
 
@@ -254,6 +254,14 @@ public class Player {
             return true;
         }
         return false;
+    }
+
+    public void sendToHospital() {
+        this.currentPlace = map.hospital();
+    }
+
+    public void gainPoints_(int points) {
+        this.points += points;
     }
 
     public enum State {WAITING_FOR_RESPONSE, END_TURN, GAME_OVER, WAITING_FOR_COMMAND}

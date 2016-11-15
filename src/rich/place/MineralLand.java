@@ -13,7 +13,8 @@ public class MineralLand extends Place {
 
     @Override
     public Player.State actionTo(Player player) {
-        return null;
+        player.gainPoints_(this.points);
+        return Player.State.END_TURN;
     }
 
 }

@@ -11,7 +11,7 @@ public class Prison extends Place {
 
     @Override
     public Player.State actionTo(Player player) {
-        player.pausedBy(GameConstant.PRISON_PAUSED_TIMES);
+        player.setPauseTime(GameConstant.PRISON_PAUSED_TIMES);
         return Player.State.END_TURN;
     }
 

@@ -10,7 +10,7 @@ public class Hospital extends Place {
 
     @Override
     public Player.State actionTo(Player player) {
-        return null;
+        return Player.State.END_TURN;
     }
 
 }

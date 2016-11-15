@@ -1,8 +1,6 @@
 package rich.place;
 
-import rich.GameConstant;
 import rich.Player;
-import rich.tool.Tool;
 
 import java.util.ArrayList;
 
@@ -11,7 +9,6 @@ public class Land extends Place {
     private Player owner;
     private int currentLevel;
     private int price;
-    private int roadToll;
 
     public Land() {
         super();
@@ -86,10 +83,8 @@ public class Land extends Place {
 
     @Override
     public Player.State actionTo(Player player) {
-        if (attachedTool != null && attachedTool.ordinal() == Tool.Bomb.ordinal()) {
-            player.pausedBy(GameConstant.BOMB_PAUSED_TIMES);
-            return Player.State.END_TURN;
-        }
+        if (attachedTool != null)
+            return attachedTool.takeAction(player);
 
         if (owner != null && owner != player) {
             if (player.canAfford(this.price)) {
@@ -100,8 +95,11 @@ public class Land extends Place {
                 return Player.State.GAME_OVER;
             }
         }
-        if (owner == player) {
-            return Player.State.WAITING_FOR_RESPONSE;
+        else if (owner == player) {
+            if (this.canUpgrade())
+                return Player.State.WAITING_FOR_RESPONSE;
+            else
+                return Player.State.END_TURN;
         }
         else {
             return Player.State.WAITING_FOR_RESPONSE;
