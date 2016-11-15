@@ -78,11 +78,10 @@ public class WaitingForCommandToEndTurnTest {
     public void should_end_turn_when_roll_through_bomb() {
         Place place = new Land();
         Tool tool = Tool.Bomb;
-        boolean ret = tool.attachTo(place);
+        tool.attachTo(place);
         when(map.move(any(), eq(1))).thenReturn(place);
         assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
 
-        System.out.println(place.isToolAttached());
         player.execute(roll);
         assertThat(player.getState(), is(Player.State.END_TURN));
     }

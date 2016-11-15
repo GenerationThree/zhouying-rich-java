@@ -188,7 +188,7 @@ public class Player {
         int oneLevelAmount = 0;
         int twoLevelAmount = 0;
         int threeLevelAmount = 0;
-        for (Land land: lands) {
+        for (Land land : lands) {
             switch (land.getCurrentLevel()) {
                 case 0:
                     zeroLevelAmount += 1;
@@ -204,18 +204,17 @@ public class Player {
                     break;
             }
         }
-        StringBuilder builder = new StringBuilder();
-        builder.append("资金: $").append(balance).append("\n")
-                .append("点数: ").append(points).append("\n")
-                .append("地产: ").append("空地 :").append(zeroLevelAmount).append("处; ")
-                .append("茅屋: ").append(oneLevelAmount).append("处; ")
-                .append("洋房: ").append(twoLevelAmount).append("处; ")
-                .append("摩天楼: ").append(threeLevelAmount).append("处\n")
-                .append("道具: ")
-                .append("路障: ").append(tools.getOrDefault(Tool.RoadBlock.ordinal(), 0)).append("个; ")
-                .append("炸弹: ").append(tools.getOrDefault(Tool.Bomb.ordinal(), 0)).append("个; ")
-                .append("机器娃娃: ").append(tools.getOrDefault(Tool.Robot.ordinal(), 0)).append("个\n ");
-        return builder.toString();
+        String ret = "资金: $" + balance + "\n" +
+                "点数: " + points + "\n" +
+                "地产: " + "空地 :" + zeroLevelAmount + "处; " +
+                "茅屋: " + oneLevelAmount + "处; " +
+                "洋房: " + twoLevelAmount + "处; " +
+                "摩天楼: " + threeLevelAmount + "处\n" +
+                "道具: " +
+                "路障: " + tools.getOrDefault(Tool.RoadBlock.ordinal(), 0) + "个; " +
+                "炸弹: " + tools.getOrDefault(Tool.Bomb.ordinal(), 0) + "个; " +
+                "机器娃娃: " + tools.getOrDefault(Tool.Robot.ordinal(), 0) + "个\n ";
+        return ret;
     }
 
     public static Player createWithBalanceAndPoints(int balance, int points) {
@@ -271,6 +270,19 @@ public class Player {
         }
         map.cleanRoad(this.currentPlace, step);
         return true;
+    }
+
+    public String help() {
+        String ret = "roll: 掷骰子命令，行走1~6步\n" +
+                "block n: 拥有路障后，可将路障放置到离当前位置前后n步的距离，任一玩家经过路障，都将被拦截。该道具一次有效。n表示前后的相对距离，负数表示后方\n" +
+                "bomb n: 拥有炸弹后，可将炸弹放置到离当前位置前后n步的距离，任一玩家经过炸弹会被炸弹炸伤，送往医院。该道具一次有效。n表示前后的相对距离，负数表示后方\n" +
+                "robot: 使用该道具，可清扫前方路面上10步以内的其它道具，如炸弹、路障\n" +
+                "sell x: 出售自己的房产，x表示地图上的绝对位置，即地产的编号\n" +
+                "sellTool x: 出售道具，x表示道具编号\n" +
+                "query: 显示自家资产信息\n" +
+                "help: 查看命令帮助\n" +
+                "quit: 强制退出\n";
+        return ret;
     }
 
     public enum State {WAITING_FOR_RESPONSE, END_TURN, GAME_OVER, WAITING_FOR_COMMAND}

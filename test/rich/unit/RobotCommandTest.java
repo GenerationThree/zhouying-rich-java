@@ -44,6 +44,7 @@ public class RobotCommandTest {
         player.execute(robot);
         assertThat(placeWithBomb1.isToolAttached(), is(false));
         assertThat(placeWithBomb2.isToolAttached(), is(false));
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
     }
 
     @Test
@@ -58,6 +59,7 @@ public class RobotCommandTest {
         assertThat(placeWithBlock.isToolAttached(), is(true));
         assertThat(placeWithBlock.isToolAttached(), is(true));
         assertThat(placeWithBomb.isToolAttached(), is(true));
+        assertThat(player.getState(), is(Player.State.WAITING_FOR_COMMAND));
     }
 
 
