@@ -178,6 +178,7 @@ public class Player {
     public static Player createPlayerWithBalanceAndAMap(GameMapImp map, int startBalance) {
         Player player = new Player();
         player.map = map;
+        player.currentPlace = map.starting();
         player.balance = startBalance;
         return player;
     }
@@ -262,6 +263,14 @@ public class Player {
 
     public void gainPoints_(int points) {
         this.points += points;
+    }
+
+    public boolean cleanRoad(int step) {
+        if (tools.getOrDefault(Tool.Robot.ordinal(), 0) == 0) {
+            return false;
+        }
+        map.cleanRoad(this.currentPlace, step);
+        return true;
     }
 
     public enum State {WAITING_FOR_RESPONSE, END_TURN, GAME_OVER, WAITING_FOR_COMMAND}

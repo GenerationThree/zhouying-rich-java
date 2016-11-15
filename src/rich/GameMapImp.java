@@ -112,7 +112,7 @@ public class GameMapImp implements GameMap{
     }
 
     public Place findByPosition(int position) {
-        return places.get(position);
+        return places.get(position % places.size());
     }
 
     public int findByPlace(Place place) {
@@ -120,6 +120,12 @@ public class GameMapImp implements GameMap{
             if (place == places.get(i)) return i;
         }
         return -1;
+    }
+
+    public boolean putBomb(int position) {
+        Place cur = places.get(position);
+        if (cur.tryToAttachTool(Tool.Bomb)) return true;
+        return false;
     }
 
     public boolean putBlock(int position) {
@@ -136,9 +142,10 @@ public class GameMapImp implements GameMap{
         return places.get(hospitalLocation);
     }
 
-    public boolean putBomb(int position) {
-        Place cur = places.get(position);
-        if (cur.tryToAttachTool(Tool.Bomb)) return true;
-        return false;
+    public void cleanRoad(Place currentPlace, int step) {
+        for (int i = 0; i < step; ++i) {
+            Place cur = findByPosition(findByPlace(currentPlace) + i);
+            cur.clearTool();
+        }
     }
 }

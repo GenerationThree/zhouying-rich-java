@@ -30,5 +30,9 @@ public class GameConstant {
     public static final int MINERAL_LAND_AMOUNT = 6;
     public static final int PLACE_AMOUNT = 70;
 
+    public static final int BLOCK_LIMIT_STEP = 10;
+    public static final int BOMB_LIMIT_STEP = 10;
+    public static final int ROBOT_CLEAR_RANGE = 10;
+
 
 }
