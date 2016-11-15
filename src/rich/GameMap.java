@@ -10,4 +10,5 @@ public interface GameMap {
     int findByPlace(Place place);
 
     boolean putBlock(int position);
+
 }

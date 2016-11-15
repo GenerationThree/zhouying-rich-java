@@ -8,7 +8,6 @@ import rich.Player;
 import rich.command.BlockCommand;
 import rich.command.Command;
 import rich.command.RollCommand;
-import rich.tool.Tool;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

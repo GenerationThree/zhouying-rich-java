@@ -3,19 +3,51 @@ package rich.place;
 import rich.Player;
 import rich.tool.Tool;
 
-public interface Place {
-    Player.State actionTo(Player player);
+import java.util.ArrayList;
+import java.util.List;
 
-    boolean tryToAttachTool(Tool tool);
+public abstract class Place {
 
-    boolean isToolAttached();
+    protected Tool attachedTool;
+    protected List<Player> playersOn;
 
-    void clearTool();
+    public Place() {
+        attachedTool = null;
+        playersOn = new ArrayList<>();
+    }
 
-    Tool attachedToolType();
+    public abstract Player.State actionTo(Player player);
 
-    boolean isPlayerOn();
+    public boolean tryToAttachTool(Tool tool) {
+        if (canToolBeAttached()) {
+            this.attachedTool = tool;
+            return true;
+        }
+        return false;
+    }
 
-    void setPlayerOn(Player player);
+    public boolean isToolAttached() {
+        return attachedTool != null;
+    }
+
+    public void clearTool() {
+        attachedTool = null;
+    }
+
+    public Tool attachedToolType() {
+        return attachedTool;
+    }
+
+    public boolean isPlayerOn() {
+        return playersOn.size() > 0;
+    }
+
+    public void setPlayerOn(Player player) {
+        playersOn.add(player);
+    }
+
+    private boolean canToolBeAttached() {
+        return attachedTool == null && playersOn.size() == 0;
+    }
 
 }
