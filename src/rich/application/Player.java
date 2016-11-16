@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Player {
+    private GameMapImp map;
+    private String name;
     private State state;
     private Command lastExecuted;
     private List<Land> lands;
@@ -22,16 +24,16 @@ public class Player {
     private int toolsAmount;
     private int noPunishTimes;
     private int pauseTimes;
-    private GameMapImp map;
-    private String name;
 
-    public Player(String name, int balance) {
+    public Player(GameMapImp map, String name, int balance) {
+        this.map = map;
         this.name = name;
         this.state = State.WAITING_FOR_COMMAND;
         this.lastExecuted = null;
         this.lands = new ArrayList<>();
         this.tools = new HashMap<>();
         this.balance = balance;
+        this.currentPlace = map.starting();
         this.points = 0;
         this.toolsAmount = 0;
         this.noPunishTimes = 0;
@@ -220,7 +222,7 @@ public class Player {
         }
         String ret = "资金: $" + balance + "\n" +
                 "点数: " + points + "\n" +
-                "地产: " + "空地 :" + zeroLevelAmount + "处; " +
+                "地产: " + "空地: " + zeroLevelAmount + "处; " +
                 "茅屋: " + oneLevelAmount + "处; " +
                 "洋房: " + twoLevelAmount + "处; " +
                 "摩天楼: " + threeLevelAmount + "处\n" +
