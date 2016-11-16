@@ -17,4 +17,7 @@ public class MineralLand extends Place {
         return Player.State.END_TURN;
     }
 
+    public int getPoints() {
+        return points;
+    }
 }

@@ -2,8 +2,7 @@ package rich.application;
 
 import rich.command.Command;
 import rich.command.Response;
-import rich.place.Land;
-import rich.place.Place;
+import rich.place.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -36,18 +35,33 @@ public class Game {
                 continue;
             }
             player.setActive();
-            if (player.getState() == Player.State.WAITING_FOR_COMMAND) {
+            while (player.getState() == Player.State.WAITING_FOR_COMMAND) {
                 Command command = controller.commandFromIo(player);
                 player.execute(command);
                 if (player.getState() == Player.State.WAITING_FOR_RESPONSE) {
                     Response response = controller.responseFromIo(player, map);
                     player.respond(response);
-                }
-                else {
+                } else {
                     Place curPlace = player.getCurrentPlace();
                     if (curPlace instanceof Land) {
                         Land land = (Land) curPlace;
-                        System.out.print("来到" + land.getOwner().getName() + "的地产, 缴纳过路费" + land.roadToll() + "元\n");
+                        if (player.getNoPunishTimes() > 0) {
+                            System.out.print("来到" + land.getOwner().getName() + "的地产, 由于福神附身, 免过路费\n");
+                        } else {
+                            System.out.print("来到" + land.getOwner().getName() + "的地产, 缴纳过路费" + land.roadToll() + "元\n");
+                        }
+                    } else if (curPlace instanceof MineralLand) {
+                        MineralLand land = (MineralLand) curPlace;
+                        System.out.println("来到矿地, " + "获取" + land.getPoints() + "点\n");
+                    } else if (curPlace instanceof Prison) {
+                        // Prison prison = (Prison) curPlace;
+                        System.out.print("来到监狱, 暂停两个回合\n");
+                    } else if (curPlace instanceof Starting) {
+                        System.out.print("回到起点\n");
+                    } else if (curPlace instanceof Hospital) {
+                        System.out.print("来到医院\n");
+                    } else if (curPlace instanceof MagicRoom) {
+                        System.out.print("来到魔法屋\n");
                     }
                 }
             }

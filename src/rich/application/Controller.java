@@ -4,6 +4,7 @@ import rich.command.*;
 import rich.place.Land;
 import rich.place.Place;
 
+import java.util.Random;
 import java.util.Scanner;
 
 import static rich.application.Game.map;
@@ -87,7 +88,14 @@ public class Controller {
         if (args.length == 1) {
             String command = args[0].toLowerCase();
             if (command.equals("roll")) {
-                ret = new RollCommand(map, () -> 1);
+                ret = new RollCommand(map, () -> {
+                    int cur = new Random().nextInt(7);
+                    while(cur == 0) {
+                        cur = new Random().nextInt(7);
+                    }
+                    System.out.println("骰子扔出了" + cur);
+                    return cur;
+                });
             } else if (command.toLowerCase().equals("robot")) {
                 ret = new RobotCommand();
             } else if (command.equals("query")) {
