@@ -87,8 +87,8 @@ public class Land extends Place {
             return attachedTool.takeAction(player);
 
         if (owner != null && owner != player) {
-            if (player.canAfford(this.price)) {
-                player.pay(this.price);
+            if (player.canAfford(this.roadToll())) {
+                player.pay(this.roadToll());
                 return Player.State.END_TURN;
             }
             else {

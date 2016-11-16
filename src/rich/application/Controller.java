@@ -72,9 +72,6 @@ public class Controller {
                     else if (responseString.equals("n"))
                         return RollCommand.NoToUpgrade;
                 }
-            } else {
-                System.out.print("来到" + land.getOwner().getName() + "的地产, 缴纳过路费" + land.roadToll() + "元\n");
-                return null;
             }
 
         }

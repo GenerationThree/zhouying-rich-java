@@ -1,6 +1,9 @@
 package rich.application;
 
-import rich.command.*;
+import rich.command.Command;
+import rich.command.Response;
+import rich.place.Land;
+import rich.place.Place;
 
 import java.io.IOException;
 import java.util.*;
@@ -39,6 +42,13 @@ public class Game {
                 if (player.getState() == Player.State.WAITING_FOR_RESPONSE) {
                     Response response = controller.responseFromIo(player, map);
                     player.respond(response);
+                }
+                else {
+                    Place curPlace = player.getCurrentPlace();
+                    if (curPlace instanceof Land) {
+                        Land land = (Land) curPlace;
+                        System.out.print("来到" + land.getOwner().getName() + "的地产, 缴纳过路费" + land.roadToll() + "元\n");
+                    }
                 }
             }
             System.out.println(player.query());
