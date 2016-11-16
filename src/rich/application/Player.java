@@ -305,5 +305,13 @@ public class Player {
         return name;
     }
 
-    public enum State {WAITING_FOR_RESPONSE, END_TURN, GAME_OVER, WAITING_FOR_COMMAND}
+    public Command getLastExecutedCommand() {
+        return lastExecuted;
+    }
+
+    public void setActive() {
+        state = State.WAITING_FOR_COMMAND;
+    }
+
+    public enum State {WAITING_FOR_RESPONSE, END_TURN, GAME_OVER, WAITING_TURN, WAITING_FOR_COMMAND}
 }
